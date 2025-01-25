@@ -7,9 +7,8 @@
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Folder Structure](#folder-structure)
-- [Installation](#installation)
 - [Contributors](#contributors)
-- [License](#license)
+
 
 ## Introduction
 Agriculture is the backbone of many economies, yet it faces numerous challenges such as resource inefficiency, unpredictable weather patterns, and pest control. **FarmWise** leverages data science and machine learning to provide actionable insights that help farmers make better decisions and optimize their yields.
