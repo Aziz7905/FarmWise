@@ -25,7 +25,7 @@ This project was developed collaboratively by a team of six students as part of 
 - **Frontend**: Angular  
 - **Backend**: Spring Boot  
 - **Data Analysis & Modeling**: Python (NumPy, Pandas, Scikit-learn, TensorFlow)  
-- **Database**: MySQL  
+- **Database**: MySQL & MongoDB  
 - **Version Control**: Git, GitHub
 
 ## Folder Structure
