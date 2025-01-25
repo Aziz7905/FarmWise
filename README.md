@@ -32,10 +32,20 @@ This project was developed collaboratively by a team of six students as part of 
 ## Folder Structure
 ```plaintext
 FarmWise/
-├── frontend/      # Frontend code (e.g., Angular)
-├── backend/       # Backend code (e.g., Spring Boot)
+├── frontend/      # Frontend code 
+├── backend/       # Backend code 
 ├── models/        # Machine learning models and scripts
 ├── docs/          # Documentation
 ├── tests/         # Unit and integration tests
 ├── assets/        # Images, icons, etc.
 └── README.md      # Project overview
+```
+## Contributors
+
+- [Barkaoui Aziz Allah](https://github.com/Aziz7905)
+- [Naoui Fatma](https://github.com/Fatma-Naoui) 
+- [Nour El Houda Ouni](https://github.com/nourouni)  
+- [Bchir Med Aziz](https://github.com/MedAzBc)  
+- [Allaya Med Aziz](https://github.com/aziz877)  
+- [Latrach Nada](https://github.com/nadapianist)  
+
