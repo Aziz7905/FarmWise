@@ -22,10 +22,10 @@ This project was developed collaboratively by a team of six students as part of 
 - Backend integration to manage data pipelines and model deployment.
 
 ## Technologies Used
-- **Frontend**: Angular  
-- **Backend**: Spring Boot  
+- **Frontend**: HTML5
+- **Backend**: Django  
 - **Data Analysis & Modeling**: Python (NumPy, Pandas, Scikit-learn, TensorFlow)  
-- **Database**: MySQL & MongoDB  
+- **Database**: MySQL   
 - **Version Control**: Git, GitHub
 
 ## Folder Structure
