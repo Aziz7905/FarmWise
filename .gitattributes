@@ -1,0 +1,2 @@
+venv/Lib/site-packages/** filter=lfs diff=lfs merge=lfs -text
+assets/*.pth filter=lfs diff=lfs merge=lfs -text
