@@ -1,0 +1,19 @@
+{% include 'navbackoffice.html' %}
+
+<div class="container my-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <h2>Détails du Diagnostic</h2>
+        <p><strong>Plante :</strong> {{ diagnostic.plante.nom }}</p>
+        <p><strong>Maladie :</strong> {{ diagnostic.maladie.nom }}</p>
+        <p><strong>Traitement :</strong> {{ diagnostic.traitement.nom }}</p>
+        <p><strong>Date du Diagnostic :</strong> {{ diagnostic.date_diagnostic }}</p>
+        <p><strong>Notes :</strong> {{ diagnostic.notes }}</p>
+
+    <a href="{% url 'diagnostic-update' diagnostic.id %}" class="btn btn-warning">Modifier</a>
+<a href="{% url 'diagnostic-list' %}" class="btn btn-secondary">Retour à la liste</a>
+</div>
+    </div>
+</div>
+<!-- Include Bootstrap CSS if not already included -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">

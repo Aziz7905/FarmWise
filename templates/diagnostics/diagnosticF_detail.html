@@ -1,0 +1,285 @@
+
+
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <title>AgroFarm - Diagnostics Details</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Details about diagnostics in AgroFarm" name="description">
+
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'img/favicon.ico' %}">
+
+
+    <!-- Google Web Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;500&display=swap" rel="stylesheet">  
+
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
+
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .diagnostic-details {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+            text-align: center;
+        }
+        .diagnostic-details h1 {
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+        .diagnostic-details h3 {
+            color: #6c757d;
+            font-size: 1.1rem;
+            margin-top: 30px;
+            font-weight: 600;
+        }
+        .diagnostic-details p {
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .badge-notes {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .back-button, .details-button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-weight: 600;
+        }
+        .back-button:hover, .details-button:hover {
+            background-color: #218838;
+        }
+        .modal-content {
+            border-radius: 10px;
+        }
+        .modal-header {
+            background-color: #28a745;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .modal-title {
+            font-size: 1.25rem;
+        }
+        .modal-body p {
+            color: #495057;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+    </div>
+    <!-- Spinner End -->
+
+
+    {% include 'navbar.html' %}
+
+
+    <div class="container">
+        <div class="diagnostic-details">
+            <h1>Détails Diagnostic de cette plante</h1>
+            <h3>Plante</h3>
+            <p>{{ diagnostic.plante.nom }}</p>
+            <h3>Maladie</h3>
+            <p>{{ diagnostic.maladie.nom }}</p>
+            <h3>Traitement</h3>
+            <p>{{ diagnostic.traitement.méthode }}</p>
+            <h3>Date du Diagnostic</h3>
+            <p>{{ diagnostic.date_diagnostic }}</p>
+
+
+            <h3>Notes</h3>
+            <span class="badge-notes">{{ diagnostic.notes }}</span>  <!-- Display notes as a badge -->
+
+
+            <div class="action-buttons">
+                <a href="{% url 'diagnosticF-list' %}" class="back-button">Retour à la liste</a>
+               
+            </div>
+        </div>
+    </div>
+
+
+    {% include 'footer.html' %}
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
+    <script src="{% static 'lib/parallax/parallax.min.js' %}"></script>
+    <script src="{% static 'lib/isotope/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'lib/lightbox/js/lightbox.min.js' %}"></script>
+
+
+    <!-- Template Javascript -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////sonia//////////////////
+{% include 'navbackoffice.html' %}
+
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="text-center">{% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %} un Produit de Contrôle</h1>
+
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+
+                <!-- Nom Field -->
+                <div class="form-group">
+                    <label for="id_nom">Nom:</label>
+                    <input type="text" name="nom" class="form-control" id="id_nom" value="{{ form.nom.value|default:'' }}" required>
+                </div>
+
+
+                <!-- Type Field -->
+                <div class="form-group">
+                    <label for="id_type">Type de Produit:</label>
+                    <select name="type" class="form-control" id="id_type" required>
+                        {% for choice_value, choice_label in form.type.field.choices %}
+                            <option value="{{ choice_value }}" {% if form.type.value == choice_value %}selected{% endif %}>
+                                {{ choice_label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                <!-- Conformity Message (Vérification via AgriDrug API) -->
+                {% if conformity_message %}
+                    <div class="alert {% if 'non conforme' in conformity_message %}alert-danger{% else %}alert-success{% endif %} mt-3">
+                        {{ conformity_message }}
+                    </div>
+                {% endif %}
+
+
+                <!-- Description Field -->
+                <div class="form-group">
+                    <label for="id_description">Description:</label>
+                    <textarea name="description" class="form-control" id="id_description" required>{{ form.description.value|default:'' }}</textarea>
+                </div>
+
+
+                <!-- Méthode d'application Field -->
+                <div class="form-group">
+                    <label for="id_méthode_application">Méthode d'application:</label>
+                    <input type="text" name="méthode_application" class="form-control" id="id_méthode_application" value="{{ form.méthode_application.value|default:'' }}" required>
+                </div>
+
+
+                <!-- Efficacité Field -->
+                <div class="form-group">
+                    <label for="id_efficacité">Efficacité (%):</label>
+                    <input type="number" name="efficacité" class="form-control" id="id_efficacité" value="{{ form.efficacité.value|default:'' }}" step="0.01" required>
+                </div>
+
+
+                <!-- Pests Field (Multi-select) -->
+                <div class="form-group">
+                    <label for="id_pests">Ravageurs ciblés:</label>
+                    <select name="pests" class="form-control" id="id_pests" multiple>
+                        {% for pest in form.pests.field.queryset %}
+                            <option value="{{ pest.pk }}" {% if pest.pk in form.pests.value %}selected{% endif %}>
+                                {{ pest.nom }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                <!-- Submit and Cancel Buttons -->
+                <button type="submit" class="btn btn-primary">
+                    {% if form.instance.pk %}Mettre à jour{% else %}Ajouter{% endif %}
+                </button>
+                <a href="{% url 'controlproduct-list' %}" class="btn btn-secondary">Annuler</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Include Bootstrap CSS if not already included -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+
+

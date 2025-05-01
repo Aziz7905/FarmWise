@@ -1,0 +1,25 @@
+
+
+{% include 'navbackoffice.html' %}
+
+
+{% block content %}
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <h1 class="text-center text-danger">Supprimer {{ maladie.nom }} ?</h1>
+      <p class="text-center">Êtes-vous sûr de vouloir supprimer cette maladie ?</p>
+      <form method="POST" class="text-center">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
+        <a href="{% url 'maladie-list' %}" class="btn btn-secondary">Annuler</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+
