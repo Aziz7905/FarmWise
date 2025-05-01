@@ -1,0 +1,129 @@
+import tkinter as tk
+from tkinter import filedialog, Label, Button
+from PIL import Image, ImageTk
+import numpy as np
+import os
+import torch
+import torchvision.transforms as transforms
+from tensorflow.keras.models import load_model
+from tensorflow.keras.applications.efficientnet import preprocess_input
+from tensorflow.keras.preprocessing.image import img_to_array
+from torchvision import models
+import torch.nn as nn
+from keras.layers import InputLayer
+
+# Suppress TensorFlow logs
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
+# Class labels
+GRAPE_CLASSES = ['ESCA', 'Black Rot', 'Healthy', 'Leaf Blight']
+DATES_CLASSES = ['brown spots', 'healthy', 'white scale']
+ORANGE_CLASSES = ['grenning', 'canker', 'blackspot', 'fresh']
+APPLE_CLASSES = ['healthy', 'multiple_diseases', 'rust', 'scab']
+
+# Load models
+def custom_load_model(model_path):
+    try:
+        return load_model(model_path)
+    except TypeError as e:
+        if "Unrecognized keyword arguments: ['batch_shape']" in str(e):
+            custom_objects = {
+                'InputLayer': lambda **kwargs: InputLayer(**{k: v for k, v in kwargs.items() if k != 'batch_shape'})
+            }
+            return load_model(model_path, custom_objects=custom_objects)
+        raise
+
+# Initialize PyTorch model
+class PlantDiseaseModel(nn.Module):
+    def __init__(self, num_classes=4, pretrained=False):
+        super(PlantDiseaseModel, self).__init__()
+        self.backbone = models.resnet50(pretrained=pretrained)
+        in_features = self.backbone.fc.in_features
+        self.backbone.fc = nn.Sequential(
+            nn.Linear(in_features, 256),
+            nn.ReLU(),
+            nn.Dropout(0.3),
+            nn.Linear(256, 64),
+            nn.ReLU(),
+            nn.Dropout(0.3),
+            nn.Linear(64, num_classes)
+        )
+
+    def forward(self, x):
+        return self.backbone(x)
+
+# Load models
+grape_model = custom_load_model('assets/my_plant_classifier.h5')
+dates_model = load_model('assets/my_dates_classifier.h5')
+orange_model = load_model('assets/my_oranges_classifier.h5')
+apple_model = PlantDiseaseModel(num_classes=len(APPLE_CLASSES), pretrained=False)
+apple_model.load_state_dict(torch.load('assets/my_apple_classifier.pth', map_location=torch.device('cpu')))
+apple_model.eval()
+
+# Image transformations
+apple_transform = transforms.Compose([
+    transforms.Resize(256),
+    transforms.CenterCrop(224),
+    transforms.ToTensor(),
+    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+])
+
+def predict_image(img_path, model_type):
+    img = Image.open(img_path).convert('RGB')
+    if model_type == 'dates':
+        img = img.resize((224, 224))
+        img_array = img_to_array(img)
+        img_array = np.expand_dims(img_array, axis=0)
+        img_array = preprocess_input(img_array)
+        preds = dates_model.predict(img_array)
+        return DATES_CLASSES[np.argmax(preds)], float(np.max(preds)) * 100
+    elif model_type == 'orange':
+        img = img.resize((224, 224))
+        img_array = img_to_array(img)
+        img_array = np.expand_dims(img_array, axis=0)
+        img_array = preprocess_input(img_array)
+        preds = orange_model.predict(img_array)
+        return ORANGE_CLASSES[np.argmax(preds)], float(np.max(preds)) * 100
+    elif model_type == 'apple':
+        img = apple_transform(img).unsqueeze(0)
+        with torch.no_grad():
+            outputs = apple_model(img)
+            probabilities = torch.nn.functional.softmax(outputs, dim=1)
+            confidence, class_idx = torch.max(probabilities, 1)
+        return APPLE_CLASSES[class_idx.item()], confidence.item() * 100
+    else:
+        img = img.resize((64, 64))
+        img_array = np.array(img).astype('float32') / 255.0
+        img_array = np.expand_dims(img_array, axis=0)
+        preds = grape_model.predict(img_array)
+        return GRAPE_CLASSES[np.argmax(preds)], float(np.max(preds)) * 100
+
+# GUI with Tkinter
+def upload_and_predict():
+    file_path = filedialog.askopenfilename()
+    if not file_path:
+        return
+    img = Image.open(file_path)
+    img = img.resize((250, 250))
+    img = ImageTk.PhotoImage(img)
+    img_label.config(image=img)
+    img_label.image = img
+    model_type = model_var.get()
+    class_name, confidence = predict_image(file_path, model_type)
+    result_label.config(text=f"Predicted: {class_name}\nConfidence: {confidence:.2f}%")
+
+root = tk.Tk()
+root.title("Plant Disease Classifier")
+
+Label(root, text="Select Image for Classification").pack()
+Button(root, text="Upload Image", command=upload_and_predict).pack()
+img_label = Label(root)
+img_label.pack()
+
+model_var = tk.StringVar(value='grape')
+tk.OptionMenu(root, model_var, 'grape', 'dates', 'orange', 'apple').pack()
+
+result_label = Label(root, text="")
+result_label.pack()
+
+root.mainloop()
