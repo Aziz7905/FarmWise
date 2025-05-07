@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import FarmerProfile, FarmerPost
 from .models import Comment
+from .models import Fertilizer, Pesticide, Material, TreeType, CropField, CropTask, Note
 
 class UserRegisterForm(UserCreationForm):
     """Extended user registration form with email field"""
@@ -49,3 +50,39 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'content': forms.Textarea(attrs={'rows': 2, 'placeholder': 'Write a comment...'})
         }
+
+
+class FertilizerForm(forms.ModelForm):
+    class Meta:
+        model = Fertilizer
+        fields = ['name', 'quantity']
+
+class PesticideForm(forms.ModelForm):
+    class Meta:
+        model = Pesticide
+        fields = ['name', 'quantity']
+
+class MaterialForm(forms.ModelForm):
+    class Meta:
+        model = Material
+        fields = ['name', 'quantity', 'unit']
+
+class TreeTypeForm(forms.ModelForm):
+    class Meta:
+        model = TreeType
+        fields = ['tree_name', 'count']
+
+class CropFieldForm(forms.ModelForm):
+    class Meta:
+        model = CropField
+        fields = ['name', 'area', 'stage', 'next_action']
+
+class CropTaskForm(forms.ModelForm):
+    class Meta:
+        model = CropTask
+        fields = ['description', 'date']
+
+class NoteForm(forms.ModelForm):
+    class Meta:
+        model = Note
+        fields = ['content']

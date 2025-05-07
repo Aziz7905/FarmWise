@@ -31,4 +31,15 @@ urlpatterns = [
     path('posts/<int:pk>/delete/', views.delete_post, name='delete-post'),
 
 
+    path('add-fertilizer/', views.add_fertilizer, name='add-fertilizer'),
+    path('add-pesticide/', views.add_pesticide, name='add-pesticide'),
+    path('add-material/', views.add_material, name='add-material'),
+    path('add-tree/', views.add_tree, name='add-tree'),
+    path('add-cropfield/', views.add_cropfield, name='add-cropfield'),
+    path('add-task/', views.add_task, name='add-task'),
+    path('add-note/', views.add_note, name='add-note'),
+
+    path('dashboard/', views.dashboard, name='dashboard'),
+
+
 ]

@@ -3,10 +3,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from .forms import (
     UserRegisterForm, UserUpdateForm, FarmerProfileUpdateForm,
-    FarmerPostForm, CommentForm
+    FarmerPostForm, CommentForm, FertilizerForm, PesticideForm, MaterialForm,
+    TreeTypeForm, CropFieldForm, CropTaskForm, NoteForm
 )
 from .models import FarmerPost
 
@@ -119,6 +121,105 @@ def delete_post(request, pk):
         post.delete()
         return redirect('post-list')
     return render(request, 'users/delete_post.html', {'post': post})
+
+
+
+
+
+
+@login_required
+def add_fertilizer(request):
+    form = FertilizerForm(request.POST or None)
+    if form.is_valid():
+        fert = form.save(commit=False)
+        fert.farmer = request.user.farmerprofile
+        fert.save()
+        return redirect('dashboard')
+    return render(request, 'users/add_fertilizer.html', {'form': form})
+
+
+@login_required
+def add_pesticide(request):
+    form = PesticideForm(request.POST or None)
+    if form.is_valid():
+        item = form.save(commit=False)
+        item.farmer = request.user.farmerprofile
+        item.save()
+        return redirect('dashboard')
+    return render(request, 'users/add_pesticide.html', {'form': form})
+
+
+@login_required
+def add_material(request):
+    form = MaterialForm(request.POST or None)
+    if form.is_valid():
+        item = form.save(commit=False)
+        item.farmer = request.user.farmerprofile
+        item.save()
+        return redirect('dashboard')
+    return render(request, 'users/add_material.html', {'form': form})
+
+
+@login_required
+def add_tree(request):
+    form = TreeTypeForm(request.POST or None)
+    if form.is_valid():
+        tree = form.save(commit=False)
+        tree.farmer = request.user.farmerprofile
+        tree.save()
+        return redirect('dashboard')
+    return render(request, 'users/add_tree.html', {'form': form})
+
+
+@login_required
+def add_cropfield(request):
+    form = CropFieldForm(request.POST or None)
+    if form.is_valid():
+        field = form.save(commit=False)
+        field.farmer = request.user.farmerprofile
+        field.save()
+        return redirect('dashboard')
+    return render(request, 'users/add_cropfield.html', {'form': form})
+
+
+@login_required
+def add_task(request):
+    form = CropTaskForm(request.POST or None)
+    if form.is_valid():
+        task = form.save(commit=False)
+        task.farmer = request.user.farmerprofile
+        task.save()
+        return redirect('dashboard')
+    return render(request, 'users/add_task.html', {'form': form})
+
+
+@login_required
+def add_note(request):
+    form = NoteForm(request.POST or None)
+    if form.is_valid():
+        note = form.save(commit=False)
+        note.farmer = request.user.farmerprofile
+        note.save()
+        return redirect('dashboard')
+    return render(request, 'users/add_note.html', {'form': form})
+
+
+
+@login_required
+def dashboard(request):
+    profile = request.user.farmerprofile
+    context = {
+        'profile': profile,
+        'fertilizers': profile.fertilizers.all(),
+        'pesticides': profile.pesticides.all(),
+        'materials': profile.materials.all(),
+        'trees': profile.trees.all(),
+        'fields': profile.cropfield_set.all(),
+        'tasks': profile.croptask_set.all().order_by('date')[:5],
+        'notes': profile.note_set.all()
+    }
+    return render(request, 'users/dashboard.html', context)
+
 
 
 

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-4">
+  <!-- Action buttons -->
+  <div class="mb-4 d-flex justify-content-end flex-wrap gap-2">
+    <a href="{% url 'profile' %}" class="btn btn-outline-primary">Update Farm Info</a>
+    <a href="{% url 'add-fertilizer' %}" class="btn btn-outline-success">+ Fertilizer</a>
+    <a href="{% url 'add-pesticide' %}" class="btn btn-outline-success">+ Pesticide</a>
+    <a href="{% url 'add-material' %}" class="btn btn-outline-success">+ Material</a>
+    <a href="{% url 'add-cropfield' %}" class="btn btn-outline-info">+ Field</a>
+    <a href="{% url 'add-tree' %}" class="btn btn-outline-info">+ Tree</a>
+    <a href="{% url 'add-task' %}" class="btn btn-outline-warning">+ Task</a>
+    <a href="{% url 'add-note' %}" class="btn btn-outline-secondary">+ Note</a>
+  </div>
+
+  <!-- Inventory Management Section -->
+  <h4 class="mb-3">🧪 Fertilizers</h4>
+  <table class="table table-striped">
+    <thead><tr><th>Name</th><th>Quantity</th><th>Date</th></tr></thead>
+    <tbody>
+      {% for item in fertilizers %}
+      <tr><td>{{ item.name }}</td><td>{{ item.quantity }} kg</td><td>{{ item.date }}</td></tr>
+      {% empty %}<tr><td colspan="3">No fertilizers found.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+
+  <h4 class="mt-5 mb-3">🧴 Pesticides</h4>
+  <table class="table table-striped">
+    <thead><tr><th>Name</th><th>Quantity</th><th>Date</th></tr></thead>
+    <tbody>
+      {% for item in pesticides %}
+      <tr><td>{{ item.name }}</td><td>{{ item.quantity }} L</td><td>{{ item.date }}</td></tr>
+      {% empty %}<tr><td colspan="3">No pesticides found.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+
+  <h4 class="mt-5 mb-3">🧰 Materials</h4>
+  <table class="table table-striped">
+    <thead><tr><th>Name</th><th>Quantity</th><th>Unit</th><th>Date</th></tr></thead>
+    <tbody>
+      {% for item in materials %}
+      <tr><td>{{ item.name }}</td><td>{{ item.quantity }}</td><td>{{ item.unit }}</td><td>{{ item.date }}</td></tr>
+      {% empty %}<tr><td colspan="4">No materials found.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+
+  <h4 class="mt-5 mb-3">🌳 Trees by Type</h4>
+  <table class="table table-striped">
+    <thead><tr><th>Tree</th><th>Count</th></tr></thead>
+    <tbody>
+      {% for tree in trees %}
+      <tr><td>{{ tree.tree_name }}</td><td>{{ tree.count }}</td></tr>
+      {% empty %}<tr><td colspan="2">No trees recorded.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+
+  <h4 class="mt-5 mb-3">🌾 Crop Fields</h4>
+  <table class="table table-striped">
+    <thead><tr><th>Name</th><th>Area (ha)</th><th>Stage</th><th>Next Action</th></tr></thead>
+    <tbody>
+      {% for field in fields %}
+      <tr><td>{{ field.name }}</td><td>{{ field.area }}</td><td>{{ field.stage }}</td><td>{{ field.next_action }}</td></tr>
+      {% empty %}<tr><td colspan="4">No fields defined.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+
+  <h4 class="mt-5 mb-3">📅 Upcoming Tasks</h4>
+  <ul class="list-group mb-4">
+    {% for task in tasks %}
+    <li class="list-group-item">{{ task.date }} — {{ task.description }}</li>
+    {% empty %}<li class="list-group-item">No upcoming tasks</li>{% endfor %}
+  </ul>
+
+  <h4 class="mt-5 mb-3">📝 Notes</h4>
+  <ul class="list-group">
+    {% for note in notes %}
+    <li class="list-group-item">{{ note.content }} <span class="text-muted float-end">{{ note.created_at|date:"M d, Y H:i" }}</span></li>
+    {% empty %}<li class="list-group-item">No notes recorded.</li>{% endfor %}
+  </ul>
+</div>
+{% endblock %}
