@@ -1,0 +1,12 @@
+<!-- diagnostics/diagnostic_confirm_delete.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Confirmer la suppression</h2>
+<p>Êtes-vous sûr de vouloir supprimer le diagnostic de {{ diagnostic.plante.nom }} concernant {{ diagnostic.maladie.nom }}?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmer</button>
+</form>
+<a href="{% url 'diagnostic-list' %}">Annuler</a>
+{% endblock %}

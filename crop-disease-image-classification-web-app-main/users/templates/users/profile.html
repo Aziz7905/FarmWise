@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+    .profile-wrapper {
+        max-width: 950px;
+        margin: 3rem auto;
+        padding: 3rem;
+        background-color: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.06);
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .profile-header h2 {
+        font-weight: 600;
+        color: #2f6d3c;
+    }
+
+    .profile-header p {
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
+
+    .profile-image-preview {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .profile-image-preview img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #2f6d3c;
+    }
+
+    legend {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #2f6d3c;
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 1rem;
+        padding-bottom: 0.25rem;
+    }
+
+    .btn-success {
+        background-color: #2f6d3c;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        font-weight: 500;
+    }
+
+    .btn-success:hover {
+        background-color: #245530;
+    }
+
+    @media (max-width: 768px) {
+        .profile-wrapper {
+            padding: 2rem;
+        }
+    }
+</style>
+
+<div class="profile-wrapper">
+    <div class="profile-header">
+        <h2>{{ user.username }}</h2>
+        <p>{{ user.email }}</p>
+    </div>
+
+    <div class="profile-image-preview">
+        <img src="{{ user.farmerprofile.profile_image.url }}" alt="Profile Image">
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <fieldset class="form-group">
+            <legend>Account Info</legend>
+            {{ u_form|crispy }}
+        </fieldset>
+
+        <fieldset class="form-group mt-4">
+            <legend>Farmer Profile</legend>
+            {{ p_form|crispy }}
+        </fieldset>
+
+        <div class="form-group text-center mt-4">
+            <button class="btn btn-success" type="submit">Update Profile</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

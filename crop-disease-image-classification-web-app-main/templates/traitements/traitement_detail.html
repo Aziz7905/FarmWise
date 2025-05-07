@@ -1,0 +1,20 @@
+
+{% include 'navbackoffice.html' %}
+
+<div class="container my-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+    <h1>Détails du traitement </h1>
+    
+    <h2><strong>Nom:</strong> {{ traitement.nom }}</h2>
+  <p><strong>Description :</strong> {{ traitement.description }}</p>
+  <p><strong>Méthode :</strong> {{ traitement.méthode }}</p>
+  <p><strong>Maladie associée :</strong> {{ traitement.maladie.nom }}</p>
+  
+  <a href="{% url 'traitement-update' traitement.pk %}" class="btn btn-primary">Modifier</a>
+  <a href="{% url 'traitement-list' %}" class="btn btn-secondary">Retour à la liste</a>
+</div>
+    </div>
+</div>
+<!-- Include Bootstrap CSS if not already included -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">

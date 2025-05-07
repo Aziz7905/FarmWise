@@ -1,0 +1,26 @@
+{% include 'navbackoffice.html' %}
+
+<div class="container my-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+    <h1>Détails du Produit de Contrôle</h1>
+    
+    <h2><strong>Nom:</strong>  {{ control_product.nom }}</h2>
+<p><strong>Type:</strong> {{ control_product.type }}</p>
+<p><strong>Description:</strong> {{ control_product.description }}</p>
+<p><strong>Méthode d'Application :</strong>  {{ control_product.méthode_application }}</p>
+<p> <strong>Efficacité:</strong>  {{ control_product.efficacité }}%</p>
+
+<h2>Ravageurs ciblés</h2>
+<ul>
+    {% for pest in control_product.pests.all %}
+        <li>{{ pest.nom }}</li>
+    {% endfor %}
+</ul>
+    <a href="/control-products/{{ plante.pk }}/update/" class="btn btn-primary">Modifier</a>
+    <a href="/control-products/" class="btn btn-secondary">Retour à la liste</a>
+</div>
+    </div>
+</div>
+<!-- Include Bootstrap CSS if not already included -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">

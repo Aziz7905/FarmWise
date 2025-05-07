@@ -1,0 +1,65 @@
+{% include 'navbackoffice.html' %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="text-center">{% if object %}Modifier{% else %}Ajouter{% endif %} un Diagnostic</h1>
+
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- Plante Field -->
+                <div class="form-group">
+                    <label for="id_plante">Plante:</label>
+                    <select name="plante" class="form-control" id="id_plante" required>
+                        {% for plante in form.plante.field.queryset %}
+                            <option value="{{ plante.id }}" {% if plante.id == form.plante.value %}selected{% endif %}>
+                                {{ plante.nom }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Maladie Field -->
+                <div class="form-group">
+                    <label for="id_maladie">Maladie:</label>
+                    <select name="maladie" class="form-control" id="id_maladie" required>
+                        {% for maladie in form.maladie.field.queryset %}
+                            <option value="{{ maladie.id }}" {% if maladie.id == form.maladie.value %}selected{% endif %}>
+                                {{ maladie.nom }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Traitement Field -->
+                <div class="form-group">
+                    <label for="id_traitement">Traitement (facultatif):</label>
+                    <select name="traitement" class="form-control" id="id_traitement">
+                        <option value="" {% if not form.traitement.value %}selected{% endif %}>Aucun</option>
+                        {% for traitement in form.traitement.field.queryset %}
+                            <option value="{{ traitement.id }}" {% if traitement.id == form.traitement.value %}selected{% endif %}>
+                                {{ traitement.nom }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Notes Field -->
+                <div class="form-group">
+                    <label for="id_notes">Notes:</label>
+                    <textarea name="notes" class="form-control" id="id_notes">{{ form.notes.value|default:'' }}</textarea>
+                </div>
+
+                <!-- Submit and Cancel Buttons -->
+                <button type="submit" class="btn btn-primary">
+                    {% if object %}Mettre à jour{% else %}Ajouter{% endif %}
+                </button>
+                <a href="{% url 'diagnostic-list' %}" class="btn btn-secondary">Annuler</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Include Bootstrap CSS if not already included -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
