@@ -1,5 +1,12 @@
-
 Django==5.0.6
 pillow==10.3.0
 tensorflow
-
+torch 
+torchvision 
+torchaudio
+django-crispy-forms 
+crispy-bootstrap5
+pandas
+numpy
+sentence-transformers
+tf-keras
