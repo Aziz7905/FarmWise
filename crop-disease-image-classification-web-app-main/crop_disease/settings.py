@@ -37,11 +37,24 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Core apps
     'prediction',
-    'users.apps.UsersConfig', 
+    'users.apps.UsersConfig',
+
+    # Third-party
     'crispy_forms',
     'crispy_bootstrap5',
+
+    # AI Model Apps
+    'olive_fruit_detection.apps.OliveFruitDetectionConfig',
+    'olive_oil_quality.apps.OliveOilQualityConfig',
+    'olive_oil_price_forcating.apps.OliveOilPriceForcatingConfig',
+    'Rainfall_forcasting.apps.RainfallForcastingConfig',
+    'crop_rotation_recommendation.apps.CropRotationRecommendationConfig',
+    'crop_soil_suitability.apps.CropSoilSuitabilityConfig',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
