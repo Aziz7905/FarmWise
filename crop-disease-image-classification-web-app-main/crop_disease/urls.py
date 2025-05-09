@@ -33,6 +33,7 @@ urlpatterns = [
     path('', include('Rainfall_forcasting.urls')),
     path('', include('crop_rotation_recommendation.urls')),
     path('', include('crop_soil_suitability.urls')),
+    path('olive/', include('olive_oil_quality.urls')),
    
 ] 
 # Serve media files during development

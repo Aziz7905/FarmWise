@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">🫒 Olive Oil Quality Prediction</h2>
+
+    <form method="post" class="card p-4 shadow">
+        {% csrf_token %}
+
+        {% for label in feature_labels %}
+            <div class="mb-3">
+                <label class="form-label text-capitalize">{{ label }}:</label>
+                <input type="text" class="form-control" name="f{{ forloop.counter }}" required>
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-success">Predict</button>
+    </form>
+
+    {% if prediction %}
+        <div class="alert alert-info mt-4">
+            <strong>Prediction Result:</strong> {{ prediction|title }}
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="alert alert-danger mt-4">
+            <strong>Error:</strong> {{ error }}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
