@@ -42,27 +42,25 @@ class RainfallForecaster:
 
 
     def predict_period(self, start_year, start_month, months=12):
-        if not self.model:
-            raise ValueError("Model is not loaded. Cannot make predictions.")
+        # Generate a list of future months starting from the provided start date
+        start_date = pd.Timestamp(f"{start_year}-{start_month:02d}")
+        future_dates = pd.date_range(start=start_date, periods=months, freq='MS')  # 'MS' gives the start of each month
 
-    # Constructing start_date to align with model expectations
-        start_date = pd.Timestamp(f"{start_year}-{start_month:02d}-01")
-    
-    # Create a time range from the start_date
-        dates = pd.date_range(start=start_date, periods=months, freq='MS')
+        # The model likely expects a time-series index for prediction, so we need to predict based on a Datetime index
+        features = pd.Series([1] * months, index=future_dates)  # Placeholder series to match the model input format
 
-    # Prepare the features in the correct format (if the model expects year and month)
-        features = [[d.year, d.month] for d in dates]
+        # Use the model to make the forecast
+        predictions = self.model.forecast(len(features))
 
-        try:
-            predictions = self.model.predict(features)
-        except Exception as e:
-            raise ValueError(f"Error during prediction: {str(e)}")
+        # Ensure no negative values (as seen in your training code)
+        predictions[predictions < 0] = 0
 
-        df = pd.DataFrame({
-            "Date": dates,
-            "Predicted Rainfall (mm)": predictions
+        # Combine the future dates with the predictions into a DataFrame
+        forecast_df = pd.DataFrame({
+            'Date': future_dates,
+            'Predicted Rainfall (mm)': predictions
         })
-        return df
+        
+        return forecast_df
 
 
