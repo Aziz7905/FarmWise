@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">🌧️ Rainfall Forecast</h2>
+
+    <form method="post" class="card p-4 shadow">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label>Region:</label>
+            <select name="region" class="form-control" required>
+                <option value="Kasserine">Kasserine</option>
+                <option value="Kebili">Kebili</option>
+                <option value="Monastir">Monastir</option>
+                <option value="Sidi Bouzid">Sidi Bouzid</option>
+                <option value="Sousse">Sousse</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label>Year:</label>
+            <input type="number" name="year" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Month:</label>
+            <input type="number" name="month" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Forecast</button>
+    </form>
+
+    {% if result_list %}
+        <div class="mt-5">
+            <h4>📍 Forecast for {{ region }}</h4>
+            <canvas id="forecastChart" width="600" height="300"></canvas>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                const labels = {{ forecast_dates|safe }};
+                const data = {{ predicted_rainfall|safe }};
+                new Chart(document.getElementById('forecastChart'), {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Predicted Rainfall (mm)',
+                            data: data,
+                            fill: false,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                });
+            </script>
+
+            <table class="table table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Predicted Rainfall (mm)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in result_list %}
+                        <tr>
+                            <td>{{ row.Date|date:"F Y" }}</td>
+                            <td>{{ row.PredictedRainfall_mm|floatformat:2 }}</td> 
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="alert alert-danger mt-4"><strong>Error:</strong> {{ error }}</div>
+    {% endif %}
+</div>
+{% endblock %}

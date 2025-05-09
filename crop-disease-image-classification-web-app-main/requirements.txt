@@ -13,3 +13,4 @@ tf-keras
 prophet
 roboflow
 ultralytics
+statsmodels
