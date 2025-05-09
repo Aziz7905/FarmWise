@@ -28,12 +28,12 @@ urlpatterns = [
 
      # AI Model Apps
     path('', include('olive_fruit_detection.urls')),
-    path('', include('olive_oil_quality.urls')),
-    path('', include('olive_oil_price_forcating.urls')),
     path('', include('Rainfall_forcasting.urls')),
     path('', include('crop_rotation_recommendation.urls')),
     path('', include('crop_soil_suitability.urls')),
-    path('olive/', include('olive_oil_quality.urls')),
+    path('', include('olive_oil_quality.urls')),
+    path('', include('olive_oil_price_forcating.urls')),
+
    
 ] 
 # Serve media files during development

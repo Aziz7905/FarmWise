@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">📈 Olive Oil Price Forecast</h2>
+
+    <form method="post" class="card p-4 shadow">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Date (ds):</label>
+                <input type="date" name="ds" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Year:</label>
+                <input type="number" name="year" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Month:</label>
+                <input type="number" name="month" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Harvest Season (0 or 1):</label>
+                <input type="number" name="is_harvest_season" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Production:</label>
+                <input type="number" step="0.01" name="production" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Surplus:</label>
+                <input type="number" step="0.01" name="surplus" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Import Demand:</label>
+                <input type="number" step="0.01" name="import_demand" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Market Tension:</label>
+                <input type="number" step="0.01" name="market_tension" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Price Premium:</label>
+                <input type="number" step="0.01" name="price_premium" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Global Price:</label>
+                <input type="number" step="0.01" name="global_price" class="form-control" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Forecast</button>
+    </form>
+
+    {% if result %}
+        <div class="alert alert-info mt-4">
+            <h5>📊 Forecast Result for {{ result.ds }}</h5>
+            <ul>
+                <li><strong>Predicted Price:</strong> {{ result.yhat }}</li>
+                <li><strong>Lower Bound:</strong> {{ result.yhat_lower }}</li>
+                <li><strong>Upper Bound:</strong> {{ result.yhat_upper }}</li>
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="alert alert-danger mt-4"><strong>Error:</strong> {{ error }}</div>
+    {% endif %}
+</div>
+{% endblock %}
