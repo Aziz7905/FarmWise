@@ -11,3 +11,5 @@ numpy
 sentence-transformers
 tf-keras
 prophet
+ultralytics
+opencv-python

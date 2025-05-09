@@ -33,6 +33,7 @@ urlpatterns = [
     path('', include('crop_soil_suitability.urls')),
     path('', include('olive_oil_quality.urls')),
     path('', include('olive_oil_price_forcating.urls')),
+    
 
    
 ] 
