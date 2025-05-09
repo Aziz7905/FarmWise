@@ -54,9 +54,9 @@
 
 <!-- Navbar Start -->
 <header class="site-header sticky-top">
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2f6d3c;">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #adb2ae;">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'defaulthomepage' %}">
                 <img src="{% static 'images/logoFW.png' %}" alt="FarmWise Logo" style="height: 40px;" class="me-2">
                 <span class="fw-bold fs-5">FarmWise</span>
             </a>
@@ -65,11 +65,23 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'defaulthomepage' %}">Home</a></li>
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'post-list' %}">Posts</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'create-post' %}">Create Post</a></li>
+                        
+                        <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Services
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                       <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Plant Scanner</a></li>
+                      
+                    </ul>
+                </li>
+
+
                     {% endif %}
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">

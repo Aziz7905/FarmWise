@@ -12,6 +12,9 @@ from .forms import (
 )
 from .models import FarmerPost
 
+def homepage(request):
+    return render(request, 'defaulthomepage.html') 
+
 
 def register(request):
     if request.method == 'POST':

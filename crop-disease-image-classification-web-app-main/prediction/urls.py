@@ -6,5 +6,5 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
-    path('', views.upload_image, name='home'),
+    path('home/', views.upload_image, name='home'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
