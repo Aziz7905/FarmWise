@@ -35,6 +35,9 @@ urlpatterns = [
     path('', include('olive_oil_price_forcating.urls')),
     path('', include('Rainfall_forcasting.urls')),
 
+    path('', include('farm_yield_estimator.urls')),
+
+    
 
    
 ] 

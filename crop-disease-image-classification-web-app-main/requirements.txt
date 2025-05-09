@@ -11,6 +11,8 @@ numpy
 sentence-transformers
 tf-keras
 prophet
-roboflow
 ultralytics
 statsmodels
+opencv-python
+
+

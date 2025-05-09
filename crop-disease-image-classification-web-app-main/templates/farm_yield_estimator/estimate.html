@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>🌳 Farm Yield Estimation</h2>
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label>Total number of trees on the farm:</label>
+            <input type="number" name="tree_count" class="form-control" required value="{{ request.POST.tree_count }}">
+        </div>
+
+        <div class="mb-3">
+            <label>How sure do you want the estimate to be? (e.g. 0.95 for 95% sure):</label>
+            <input type="text" name="confidence_level" class="form-control" required value="{{ request.POST.confidence_level }}">
+        </div>
+
+        <div class="mb-3">
+            <label>How accurate should the result be? (Allowed difference in kg):</label>
+            <input type="text" name="margin_of_error" class="form-control" required value="{{ request.POST.margin_of_error }}">
+        </div>
+
+        <div class="mb-3">
+            <label>How much the tree yields usually change (kg):</label>
+            <small class="text-muted">Example: Enter 2 if most trees give between 6–8 kg</small>
+            <input type="text" name="estimated_std" class="form-control" required value="{{ request.POST.estimated_std }}">
+        </div>
+
+        {% if required_sample_size %}
+            <div class="alert alert-info">
+                📏 You need to measure <strong>{{ required_sample_size }}</strong> trees
+            </div>
+            <div class="mb-3">
+                <label>Enter the weights from {{ required_sample_size }} trees (comma-separated, in kg):</label>
+                <small class="text-muted">Enter at least 2 values</small>
+                <textarea name="sample_weights" class="form-control" rows="3" required>{{ request.POST.sample_weights }}</textarea>
+            </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">Get Estimate</button>
+    </form>
+
+    {% if sample_mean %}
+        <div class="mt-4 alert alert-success">
+            <h4>📊 Estimated Results</h4>
+            <p><strong>Average yield per tree:</strong> {{ sample_mean|floatformat:2 }} kg</p>
+            <p><strong>Typical variation:</strong> {{ sample_std|floatformat:2 }} kg</p>
+            <p><strong>Possible error range:</strong> ±{{ moe|floatformat:2 }} kg</p>
+            <p><strong>Each tree is likely between:</strong> {{ ci_low|floatformat:2 }} – {{ ci_high|floatformat:2 }} kg</p>
+            <p><strong>Total estimated production:</strong> {{ total_estimate|floatformat:2 }} kg</p>
+            <p><strong>Likely total range:</strong> {{ total_ci_low|floatformat:2 }} – {{ total_ci_high|floatformat:2 }} kg</p>
+        </div>
+    {% elif single_tree_result %}
+        <div class="mt-4 alert alert-info">
+            <p><strong>Total Production Estimate:</strong> {{ single_tree_result|floatformat:2 }} kg</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
