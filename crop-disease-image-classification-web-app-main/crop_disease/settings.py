@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'Rainfall_forcasting.apps.RainfallForcastingConfig',
     'crop_rotation_recommendation.apps.CropRotationRecommendationConfig',
     'crop_soil_suitability.apps.CropSoilSuitabilityConfig',
+    'farm_yield_estimator.apps.FarmYieldEstimatorConfig',
 ]
 
 
