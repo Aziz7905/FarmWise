@@ -22,23 +22,11 @@ This project was developed collaboratively by a team of six students as part of 
 - Backend integration to manage data pipelines and model deployment.
 
 ## Technologies Used
-- **Frontend**: Angular  
-- **Backend**: Spring Boot  
+- **Django** 
 - **Data Analysis & Modeling**: Python (NumPy, Pandas, Scikit-learn, TensorFlow)  
-- **Database**: MySQL & MongoDB  
+- **Database**: Sqlite 
 - **Version Control**: Git, GitHub
 
-## Folder Structure
-```plaintext
-FarmWise/
-├── frontend/      # Frontend code 
-├── backend/       # Backend code 
-├── models/        # Machine learning models and scripts
-├── docs/          # Documentation
-├── tests/         # Unit and integration tests
-├── assets/        # Images, icons, etc.
-└── README.md      # Project overview
-```
 ## Contributors
 
 - [Barkaoui Aziz Allah](https://github.com/Aziz7905)
