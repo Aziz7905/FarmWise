@@ -46,5 +46,6 @@ FarmWise/
 - [Nour El Houda Ouni](https://github.com/nourouni)  
 - [Bchir Med Aziz](https://github.com/MedAzBc)  
 - [Allaya Med Aziz](https://github.com/aziz877)  
-- [Latrach Nada](https://github.com/nadapianist)  
+- [Latrach Nada](https://github.com/nadapianist)
+- [Bahri Yasmine](https://github.com/Bahriyasmine) 
 
