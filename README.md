@@ -29,10 +29,11 @@ This project was developed collaboratively by a team of seven students as part o
 ## Contributors
 
 - [Barkaoui Aziz Allah](https://github.com/Aziz7905)
-- [Naoui Fatma](https://github.com/Fatma-Naoui) 
+- [Naoui Fatma](https://github.com/Fatma-Naoui)
+- [Latrach Nada](https://github.com/nadapianist)
+- [Bahri Yasmine](https://github.com/Bahriyasmine) 
 - [Nour El Houda Ouni](https://github.com/nourouni)  
 - [Bchir Med Aziz](https://github.com/MedAzBc)  
 - [Allaya Med Aziz](https://github.com/aziz877)  
-- [Latrach Nada](https://github.com/nadapianist)
-- [Bahri Yasmine](https://github.com/Bahriyasmine) 
+
 
