@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="w-100" src="../static/img/carousel-1.jpg" alt="Image">
+                    <img class="w-100" src="../static/img/olive.jpg" alt="Image">
                     <div class="carousel-caption">
                         <div class="container">
                             <div class="row justify-content-center">
@@ -148,10 +148,10 @@
                     <img class="img-fluid rounded" data-wow-delay="0.1s" src="../static/img/about.jpg">
                 </div>
                 <div class="col-lg-6 col-md-7 wow fadeInUp" data-wow-delay="0.3s">
-                    <h1 class="display-1 text-primary mb-0">Plant Scanner</h1>
+                    <h1 class="display-1 text-primary mb-0">FarmWise</h1>
                   
                     <h1 class="display-5 mb-4">Smart farming isn't the future — it's the present we cultivate.</h1>
-                    <p class="mb-4">The Plant Scanner is a smart tool that helps farmers and gardeners instantly identify plant diseases using just a photo. With advanced AI analysis, it detects visible symptoms, provides accurate diagnoses, and recommends tailored treatments — helping you protect your crops early, reduce loss, and improve yields. Simply snap, scan, and grow smarter.</p>
+                    <p class="mb-4">FarmWise is a collaborative data science project designed to optimize farm management using advanced machine learning techniques. Developed as part of the "Data Science and Machine Learning" program at ESPRIT University, this project aims to address the challenges faced in agriculture through data-driven solutions.</p>
                     <a class="btn btn-primary py-3 px-4" href="">Explore More</a>
                 </div>
                 <div class="col-lg-3 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
@@ -179,28 +179,29 @@
 
 
     <!-- Facts Start -->
-    <div class="container-fluid facts my-5 py-5" data-parallax="scroll" data-image-src="../static/img/banner.jpg">
-        <div class="container py-5">
-            <div class="row g-5">
-                <div class="col-sm-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.1s">
-                    <h1 class="display-4 text-white" data-toggle="counter-up">1234</h1>
-                    <span class="fs-5 fw-semi-bold text-light">Happy Clients</span>
-                </div>
-                <div class="col-sm-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.3s">
-                    <h1 class="display-4 text-white" data-toggle="counter-up">1234</h1>
-                    <span class="fs-5 fw-semi-bold text-light">Garden Complated</span>
-                </div>
-                <div class="col-sm-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.5s">
-                    <h1 class="display-4 text-white" data-toggle="counter-up">1234</h1>
-                    <span class="fs-5 fw-semi-bold text-light">Dedicated Staff</span>
-                </div>
-                <div class="col-sm-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.7s">
-                    <h1 class="display-4 text-white" data-toggle="counter-up">1234</h1>
-                    <span class="fs-5 fw-semi-bold text-light">Awards Achieved</span>
-                </div>
+    <div class="container-fluid facts my-5 py-5" data-parallax="scroll" data-image-src="{% static 'img/banner.jpg' %}">
+    <div class="container py-5">
+        <div class="row g-5">
+            <div class="col-sm-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.1s">
+                <h1 class="display-4 text-white" data-toggle="counter-up">50</h1>
+                <span class="fs-5 fw-semi-bold text-light">Tested Farmers</span>
+            </div>
+            <div class="col-sm-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.3s">
+                <h1 class="display-4 text-white" data-toggle="counter-up">+20</h1>
+                <span class="fs-5 fw-semi-bold text-light">Diseases Detected</span>
+            </div>
+            <div class="col-sm-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.5s">
+                <h1 class="display-4 text-white" data-toggle="counter-up">+7</h1>
+                <span class="fs-5 fw-semi-bold text-light">Dedicated Engineers</span>
+            </div>
+            <div class="col-sm-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.7s">
+                <h1 class="display-4 text-white" data-toggle="counter-up">+7</h1>
+                <span class="fs-5 fw-semi-bold text-light">AI Models Deployed</span>
             </div>
         </div>
     </div>
+</div>
+
     <!-- Facts End -->
 
 
@@ -264,7 +265,7 @@
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="service-item rounded d-flex h-100">
                     <div class="service-img rounded">
-                        <img class="img-fluid" src="../static/img/service-1.jpg" alt="">
+                        <img class="img-fluid" src="../static/img/plantscanner.png" alt="">
                     </div>
                     <div class="service-text rounded p-5">
                         <div class="btn-square rounded-circle mx-auto mb-3">
@@ -272,7 +273,7 @@
                         </div>
                         <h4 class="mb-3">Plant Disease Detection</h4>
                         <p class="mb-4">Scan plants with your phone and get real-time insights about diseases and treatment suggestions using AI.</p>
-                        <a class="btn btn-sm" href=""><i class="fa fa-plus text-primary me-2"></i>Try Now</a>
+                        <a class="btn btn-sm" href="{% url 'home' %}"><i class="fa fa-plus text-primary me-2"></i>Try Now</a>
                     </div>
                 </div>
             </div>
@@ -280,7 +281,7 @@
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                 <div class="service-item rounded d-flex h-100">
                     <div class="service-img rounded">
-                        <img class="img-fluid" src="../static/img/service-2.jpg" alt="">
+                        <img class="img-fluid" src="../static/img/cropsoil.jpg" alt="">
                     </div>
                     <div class="service-text rounded p-5">
                         <div class="btn-square rounded-circle mx-auto mb-3">
@@ -288,7 +289,7 @@
                         </div>
                         <h4 class="mb-3">Crop & Soil Suitability</h4>
                         <p class="mb-4">Discover which crops are best suited for your soil type and region using intelligent data analysis.</p>
-                        <a class="btn btn-sm" href=""><i class="fa fa-plus text-primary me-2"></i>Learn More</a>
+                        <a class="btn btn-sm" href="{% url 'crop_soil_suitability' %}"><i class="fa fa-plus text-primary me-2"></i>Learn More</a>
                     </div>
                 </div>
             </div>
@@ -296,15 +297,15 @@
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
                 <div class="service-item rounded d-flex h-100">
                     <div class="service-img rounded">
-                        <img class="img-fluid" src="../static/img/service-3.jpg" alt="">
+                        <img class="img-fluid" src="../static/img/estimation.png" alt="">
                     </div>
                     <div class="service-text rounded p-5">
                         <div class="btn-square rounded-circle mx-auto mb-3">
                             <img class="img-fluid" src="../static/img/icon/icon-5.png" alt="Icon">
                         </div>
-                        <h4 class="mb-3">Olive Yield Estimation</h4>
+                        <h4 class="mb-3">Yield Estimation</h4>
                         <p class="mb-4">Estimate your olive harvest yield effortlessly through image recognition and smart prediction tools.</p>
-                        <a class="btn btn-sm" href=""><i class="fa fa-plus text-primary me-2"></i>Get Estimate</a>
+                        <a class="btn btn-sm" href="{% url 'yield_estimate' %}"><i class="fa fa-plus text-primary me-2"></i>Get Estimate</a>
                     </div>
                 </div>
             </div>
@@ -312,7 +313,7 @@
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="service-item rounded d-flex h-100">
                     <div class="service-img rounded">
-                        <img class="img-fluid" src="../static/img/service-4.jpg" alt="">
+                        <img class="img-fluid" src="../static/img/evoo-7c819bcdd0c343a7bae114cbc9baea2f.jpg" alt="">
                     </div>
                     <div class="service-text rounded p-5">
                         <div class="btn-square rounded-circle mx-auto mb-3">
@@ -320,7 +321,7 @@
                         </div>
                         <h4 class="mb-3">Olive Quality Analysis</h4>
                         <p class="mb-4">Assess the quality of your olive production using computer vision to ensure optimal harvest.</p>
-                        <a class="btn btn-sm" href=""><i class="fa fa-plus text-primary me-2"></i>Analyze Now</a>
+                        <a class="btn btn-sm" href="{% url 'analyse_olive_quality' %}"><i class="fa fa-plus text-primary me-2"></i>Analyze Now</a>
                     </div>
                 </div>
             </div>
@@ -328,7 +329,7 @@
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                 <div class="service-item rounded d-flex h-100">
                     <div class="service-img rounded">
-                        <img class="img-fluid" src="../static/img/service-5.jpg" alt="">
+                        <img class="img-fluid" src="../static/img/rain.jpg" alt="">
                     </div>
                     <div class="service-text rounded p-5">
                         <div class="btn-square rounded-circle mx-auto mb-3">
@@ -336,7 +337,7 @@
                         </div>
                         <h4 class="mb-3">Rainfall Forecasting</h4>
                         <p class="mb-4">Stay ahead of the weather. Access short-term and seasonal rainfall forecasts for smarter planning.</p>
-                        <a class="btn btn-sm" href=""><i class="fa fa-plus text-primary me-2"></i>Check Forecast</a>
+                        <a class="btn btn-sm" href="{% url 'rainfall_forecast' %}"><i class="fa fa-plus text-primary me-2"></i>Check Forecast</a>
                     </div>
                 </div>
             </div>
@@ -344,7 +345,7 @@
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
                 <div class="service-item rounded d-flex h-100">
                     <div class="service-img rounded">
-                        <img class="img-fluid" src="../static/img/service-6.jpg" alt="">
+                        <img class="img-fluid" src="../static/img/forcast.png" alt="">
                     </div>
                     <div class="service-text rounded p-5">
                         <div class="btn-square rounded-circle mx-auto mb-3">
@@ -352,7 +353,7 @@
                         </div>
                         <h4 class="mb-3">Market Price Forecasting</h4>
                         <p class="mb-4">Access AI-powered market insights to forecast crop prices and maximize profit margins.</p>
-                        <a class="btn btn-sm" href=""><i class="fa fa-plus text-primary me-2"></i>View Trends</a>
+                        <a class="btn btn-sm" href="{% url 'forecast_price' %}"><i class="fa fa-plus text-primary me-2"></i>View Trends</a>
                     </div>
                 </div>
             </div>
@@ -422,7 +423,7 @@
                     <div class="portfolio-inner rounded">
                         <img class="img-fluid" src="../static/img/service-4.jpg" alt="">
                         <div class="portfolio-text">
-                            <h4 class="text-white mb-4">Garden Maintenance</h4>
+                            <h4 class="text-white mb-4">Farm Maintenance</h4>
                             <div class="d-flex">
                                 <a class="btn btn-lg-square rounded-circle mx-2" href="../static/img/service-4.jpg" data-lightbox="portfolio"><i class="fa fa-eye"></i></a>
                                 <a class="btn btn-lg-square rounded-circle mx-2" href=""><i class="fa fa-link"></i></a>
@@ -460,92 +461,39 @@
     <!-- Projects End -->
 
 
-    <!-- Team Start -->
-    <div class="container-xxl py-5">
-        <div class="container">
-            <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                <p class="fs-5 fw-bold text-primary">Our Team</p>
-                <h1 class="display-5 mb-5">Dedicated & Experienced Team Members</h1>
+
+
+<!-- Testimonial Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-5 wow fadeInUp" data-wow-delay="0.1s">
+                <p class="fs-5 fw-bold text-primary">Testimonial</p>
+                <h1 class="display-5 mb-5">What Our Farmers Say About FarmWise</h1>
+                <p class="mb-4">Farmers and cooperatives across Tunisia are using FarmWise to detect plant diseases early, forecast prices, and optimize their crop strategies with AI-powered tools.</p>
+                <a class="btn btn-primary py-3 px-4" href="#">See More</a>
             </div>
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="team-item rounded">
-                        <img class="img-fluid" src="../static/img/team-1.jpg" alt="">
-                        <div class="team-text">
-                            <h4 class="mb-0">Doris Jordan</h4>
-                            <p class="text-primary">Landscape Designer</p>
-                            <div class="team-social d-flex">
-                                <a class="btn btn-square rounded-circle me-2" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-square rounded-circle me-2" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-square rounded-circle me-2" href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
+            <div class="col-lg-7 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="owl-carousel testimonial-carousel">
+                    <div class="testimonial-item">
+                        <img class="img-fluid rounded mb-3" src="{% static 'img/testimonial-1.jpg' %}" alt="">
+                        <p class="fs-5">“Thanks to FarmWise, I detected a disease in my olive trees early and saved the whole harvest. The AI scanner is fast and very accurate!”</p>
+                        <h4></h4>
+                        <span>Hanen Chabene, Mornag</span>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="team-item rounded">
-                        <img class="img-fluid" src="../static/img/team-2.jpg" alt="">
-                        <div class="team-text">
-                            <h4 class="mb-0">Johnny Ramirez</h4>
-                            <p class="text-primary">Garden Designer</p>
-                            <div class="team-social d-flex">
-                                <a class="btn btn-square rounded-circle me-2" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-square rounded-circle me-2" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-square rounded-circle me-2" href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="team-item rounded">
-                        <img class="img-fluid" src="../static/img/team-3.jpg" alt="">
-                        <div class="team-text">
-                            <h4 class="mb-0">Diana Wagner</h4>
-                            <p class="text-primary">Senior Gardener</p>
-                            <div class="team-social d-flex">
-                                <a class="btn btn-square rounded-circle me-2" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-square rounded-circle me-2" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-square rounded-circle me-2" href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
+                    <div class="testimonial-item">
+                        <img class="img-fluid rounded mb-3" src="{% static 'img/testimonial-2.jpg' %}" alt="">
+                        <p class="fs-5">“The price forecasting tool helped me decide exactly when to sell. It’s a game-changer for small farmers like me.”</p>
+                        <h4>Ali Abida</h4>
+                        <span>Olive Farmer, Sfax</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Team End -->
+</div>
+<!-- Testimonial End -->
 
-
-    <!-- Testimonial Start -->
-    <div class="container-xxl py-5">
-        <div class="container">
-            <div class="row g-5">
-                <div class="col-lg-5 wow fadeInUp" data-wow-delay="0.1s">
-                    <p class="fs-5 fw-bold text-primary">Testimonial</p>
-                    <h1 class="display-5 mb-5">What Our Clients Say About Us!</h1>
-                    <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit sed stet lorem sit clita duo justo.</p>
-                    <a class="btn btn-primary py-3 px-4" href="">See More</a>
-                </div>
-                <div class="col-lg-7 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="owl-carousel testimonial-carousel">
-                        <div class="testimonial-item">
-                            <img class="img-fluid rounded mb-3" src="../static/img/testimonial-1.jpg" alt="">
-                            <p class="fs-5">Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut et, nonumy et labore et tempor diam tempor erat.</p>
-                            <h4>Client Name</h4>
-                            <span>Profession</span>
-                        </div>
-                        <div class="testimonial-item">
-                            <img class="img-fluid rounded mb-3" src="../static/img/testimonial-2.jpg" alt="">
-                            <p class="fs-5">Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut et, nonumy et labore et tempor diam tempor erat.</p>
-                            <h4>Client Name</h4>
-                            <span>Profession</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Testimonial End -->
     
 
     {% include 'footer.html' %}
