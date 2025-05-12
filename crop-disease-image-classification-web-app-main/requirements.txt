@@ -17,6 +17,5 @@ opencv-python
 shapely
 requests
 ipinfo
-
-
-
+langchain langchain-community langchain-huggingface faiss-cpu unstructured python-docx python-dotenv
+rank_bm25
