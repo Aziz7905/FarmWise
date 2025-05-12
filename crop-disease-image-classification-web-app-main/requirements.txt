@@ -14,5 +14,9 @@ prophet
 ultralytics
 statsmodels
 opencv-python
+shapely
+requests
+ipinfo
+
 
 

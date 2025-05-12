@@ -1,0 +1,342 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Soil Composition Lookup</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Location Information Panel -->
+                    <div class="alert alert-info" id="location-info">
+                        <h4>Location Information</h4>
+                        <div id="location-loading">
+                            <p>Detecting your location... <span class="spinner-border spinner-border-sm"></span></p>
+                        </div>
+                        <div id="location-data" style="display: none;">
+                            <p><strong>Latitude:</strong> <span id="latitude"></span></p>
+                            <p><strong>Longitude:</strong> <span id="longitude"></span></p>
+                            <p><strong>Region:</strong> <span id="region"></span></p>
+                            <p><strong>City:</strong> <span id="city"></span></p>
+                        </div>
+                        <div id="location-error" class="alert alert-danger" style="display: none;">
+                            <p id="error-message"></p>
+                        </div>
+                    </div>
+
+                    <!-- City Search -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Search by City</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="city-search-form" class="form-inline">
+                                <div class="input-group mb-3">
+                                    <input type="text" id="city-input" class="form-control" placeholder="Enter a city in Tunisia" required>
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Soil Data Results -->
+                    <div id="soil-data-container" style="display: none;">
+                        <div class="card mb-4">
+                            <div class="card-header bg-success text-white">
+                                <h4>Soil Composition Results</h4>
+                            </div>
+                            <div class="card-body">
+                                <ul class="nav nav-tabs" id="soilDataTabs" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="params-tab" data-toggle="tab" href="#params" role="tab">Soil Parameters</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="soter-tab" data-toggle="tab" href="#soter" role="tab">SOTER Data</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="units-tab" data-toggle="tab" href="#units" role="tab">Soil Units</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content mt-3" id="soilDataTabContent">
+                                    <div class="tab-pane fade show active" id="params" role="tabpanel">
+                                        <div id="params-data">
+                                            <div class="alert alert-secondary">No parameter data available for this location.</div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="soter" role="tabpanel">
+                                        <div id="soter-data">
+                                            <div class="alert alert-secondary">No SOTER data available for this location.</div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="units" role="tabpanel">
+                                        <div id="units-data">
+                                            <div class="alert alert-secondary">No units data available for this location.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    // Function to display object data in a table format
+    function displayObjectData(data) {
+        if (!data) return '<div class="alert alert-warning">No data available</div>';
+        
+        let html = '<table class="table table-striped table-sm">';
+        html += '<thead><tr><th>Property</th><th>Value</th></tr></thead><tbody>';
+        
+        for (const [key, value] of Object.entries(data)) {
+            if (key !== 'polygon') { // Skip polygon data as it's too large to display
+                html += `<tr><td>${key}</td><td>${value}</td></tr>`;
+            }
+        }
+        
+        html += '</tbody></table>';
+        return html;
+    }
+
+    // Function to load and display soil data
+    function loadSoilData(lat, lon) {
+        // Show loading indicator in the soil data container
+        document.getElementById('soil-data-container').style.display = 'block';
+        document.getElementById('params-data').innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div><p>Loading soil data...</p></div>';
+        document.getElementById('soter-data').innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div><p>Loading soil data...</p></div>';
+        document.getElementById('units-data').innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div><p>Loading soil data...</p></div>';
+        
+        // Create a timeout for the request
+        const soilDataTimeout = setTimeout(() => {
+            document.getElementById('params-data').innerHTML = '<div class="alert alert-warning">Request timed out. Please try again later.</div>';
+            document.getElementById('soter-data').innerHTML = '<div class="alert alert-warning">Request timed out. Please try again later.</div>';
+            document.getElementById('units-data').innerHTML = '<div class="alert alert-warning">Request timed out. Please try again later.</div>';
+        }, 15000); // 15 second timeout
+        
+        fetch('{% url "get_soil_data_ajax" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({
+                latitude: lat,
+                longitude: lon
+            }),
+            // Add timeout handling for fetch
+            signal: AbortSignal.timeout(12000) // 12 second timeout
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Clear the timeout since we got a response
+            clearTimeout(soilDataTimeout);
+            
+            console.log("Soil data received:", data); // Debug logging
+            
+            if (data.error) {
+                document.getElementById('params-data').innerHTML = `<div class="alert alert-warning">${data.error}</div>`;
+                document.getElementById('soter-data').innerHTML = `<div class="alert alert-warning">${data.error}</div>`;
+                document.getElementById('units-data').innerHTML = `<div class="alert alert-warning">${data.error}</div>`;
+                return;
+            }
+            
+            // Update soil data tabs
+            document.getElementById('params-data').innerHTML = data.soil_data.params ? 
+                displayObjectData(data.soil_data.params) : 
+                '<div class="alert alert-secondary">No parameter data available for this location.</div>';
+            
+            document.getElementById('soter-data').innerHTML = data.soil_data.soter ? 
+                displayObjectData(data.soil_data.soter) : 
+                '<div class="alert alert-secondary">No SOTER data available for this location.</div>';
+            
+            document.getElementById('units-data').innerHTML = data.soil_data.units ? 
+                displayObjectData(data.soil_data.units) : 
+                '<div class="alert alert-secondary">No units data available for this location.</div>';
+        })
+        .catch(error => {
+            // Clear the timeout since we got a response (even if it's an error)
+            clearTimeout(soilDataTimeout);
+            
+            console.error('Error fetching soil data:', error);
+            
+            const errorMessage = `<div class="alert alert-danger">Error loading soil data: ${error.message}</div>`;
+            document.getElementById('params-data').innerHTML = errorMessage;
+            document.getElementById('soter-data').innerHTML = errorMessage;
+            document.getElementById('units-data').innerHTML = errorMessage;
+        });
+    }
+
+    // Get user location on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Create a timeout for the location request
+        const locationTimeout = setTimeout(() => {
+            document.getElementById('location-loading').style.display = 'none';
+            document.getElementById('location-error').style.display = 'block';
+            document.getElementById('error-message').textContent = 'Location detection timed out. Please try using the city search instead.';
+        }, 10000); // 10 second timeout
+        
+        // Get location
+        fetch('{% url "get_location" %}', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            // Add timeout handling for fetch
+            signal: AbortSignal.timeout(8000) // 8 second timeout
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Clear the timeout since we got a response
+            clearTimeout(locationTimeout);
+            
+            // Hide loading indicator
+            document.getElementById('location-loading').style.display = 'none';
+            
+            console.log("Location data received:", data); // Debug logging
+            
+            if (data.error) {
+                // Show error message
+                document.getElementById('location-error').style.display = 'block';
+                document.getElementById('error-message').textContent = data.error;
+                
+                // If location is not in Tunisia, display the detected location
+                if (data.latitude && data.longitude) {
+                    document.getElementById('location-data').style.display = 'block';
+                    document.getElementById('latitude').textContent = data.latitude;
+                    document.getElementById('longitude').textContent = data.longitude;
+                    document.getElementById('region').textContent = data.region || 'N/A';
+                    document.getElementById('city').textContent = data.city || 'N/A';
+                    
+                    // Still try to load soil data with the coordinates we have
+                    loadSoilData(data.latitude, data.longitude);
+                }
+            } else {
+                // Show location data
+                document.getElementById('location-data').style.display = 'block';
+                document.getElementById('latitude').textContent = data.latitude;
+                document.getElementById('longitude').textContent = data.longitude;
+                document.getElementById('region').textContent = data.region || 'N/A';
+                document.getElementById('city').textContent = data.city || 'N/A';
+                
+                // Load soil data for this location
+                loadSoilData(data.latitude, data.longitude);
+            }
+        })
+        .catch(error => {
+            // Clear the timeout since we got a response (even if it's an error)
+            clearTimeout(locationTimeout);
+            
+            console.error('Error fetching location:', error);
+            document.getElementById('location-loading').style.display = 'none';
+            document.getElementById('location-error').style.display = 'block';
+            document.getElementById('error-message').textContent = 'Failed to detect location: ' + error.message;
+            
+            // Show default location data for Tunis
+            document.getElementById('location-data').style.display = 'block';
+            document.getElementById('latitude').textContent = '36.8065';
+            document.getElementById('longitude').textContent = '10.1815';
+            document.getElementById('region').textContent = 'Tunis (Default)';
+            document.getElementById('city').textContent = 'Tunis';
+            
+            // Try to load soil data for Tunis
+            loadSoilData(36.8065, 10.1815);
+        });
+            
+        // Set up city search form
+        document.getElementById('city-search-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const city = document.getElementById('city-input').value.trim();
+            if (!city) return;
+            
+            fetch('{% url "search_by_city" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({
+                    city: city
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                    return;
+                }
+                
+                // Update location display
+                document.getElementById('location-data').style.display = 'block';
+                document.getElementById('location-error').style.display = 'none';
+                document.getElementById('latitude').textContent = data.latitude;
+                document.getElementById('longitude').textContent = data.longitude;
+                document.getElementById('region').textContent = data.display_name || 'N/A';
+                document.getElementById('city').textContent = city;
+                
+                // Show soil data if available
+                if (data.soil_data) {
+                    document.getElementById('soil-data-container').style.display = 'block';
+                    
+                    // Update soil data tabs
+                    if (data.soil_data.params) {
+                        document.getElementById('params-data').innerHTML = displayObjectData(data.soil_data.params);
+                    }
+                    
+                    if (data.soil_data.soter) {
+                        document.getElementById('soter-data').innerHTML = displayObjectData(data.soil_data.soter);
+                    }
+                    
+                    if (data.soil_data.units) {
+                        document.getElementById('units-data').innerHTML = displayObjectData(data.soil_data.units);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while searching for the city');
+            });
+        });
+    });
+</script>
+{% endblock %}
