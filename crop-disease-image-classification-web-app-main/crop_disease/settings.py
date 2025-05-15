@@ -20,6 +20,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
+import os
+os.environ['GDAL_LIBRARY_PATH'] = r'C:\Users\ounin\AppData\Local\Programs\Python\Python311\Lib\site-packages\osgeo\gdal.dll'
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-ej=koo7n93n9i9i7l%0k3^=j0+ho#fn&=_+$)g(1$a5t&@gt!8'
 
@@ -55,6 +59,8 @@ INSTALLED_APPS = [
     'crop_rotation_recommendation.apps.CropRotationRecommendationConfig',
     'crop_soil_suitability.apps.CropSoilSuitabilityConfig',
     'farm_yield_estimator.apps.FarmYieldEstimatorConfig',
+    'soil_composition.apps.SoilCompositionConfig'
+
 ]
 
 
@@ -162,3 +168,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 load_dotenv()
+
+

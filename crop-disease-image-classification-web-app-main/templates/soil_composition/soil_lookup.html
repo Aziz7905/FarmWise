@@ -1,0 +1,388 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="header">
+    <h1>Interactive Soil Choropleth Map - Tunisia</h1>
+    <p class="description">Explore soil properties across different regions of Tunisia</p>
+  </div>
+
+  <div class="controls">
+    <form method="get" action="" id="mapForm">
+      <div class="form-group">
+        <label for="dataset">Dataset:</label>
+        <select name="dataset" id="dataset" class="form-control">
+          {% for ds in available_datasets %}
+            <option value="{{ ds }}" {% if ds == selected_dataset %}selected{% endif %}>{{ ds }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="var">Variable:</label>
+        <select name="var" id="var" class="form-control">
+          {% for var in available_vars %}
+            <option value="{{ var }}" {% if var == selected_var %}selected{% endif %}>{{ var }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <button type="submit" class="btn">Update Map</button>
+    </form>
+  </div>
+
+  <div class="map-container">
+    <div id="map"></div>
+    <div id="legend">
+      <h3>{{ selected_var }}</h3>
+      <div id="colorScale"></div>
+      <div id="info-panel">
+        <h4>Region Information</h4>
+        <div id="region-info">Click on a region to see details</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="data-summary">
+    <h3>Data Summary</h3>
+    <div id="stats">
+      <div><strong>Average:</strong> <span id="avg-value">-</span></div>
+      <div><strong>Minimum:</strong> <span id="min-value">-</span></div>
+      <div><strong>Maximum:</strong> <span id="max-value">-</span></div>
+    </div>
+  </div>
+</div>
+
+<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chroma-js@2.4.2/chroma.min.js"></script>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .header {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .header h1 {
+    color: #2a6d3c;
+    margin-bottom: 5px;
+  }
+  
+  .description {
+    color: #666;
+    font-style: italic;
+  }
+  
+  .controls {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
+  .form-group {
+    margin: 0 15px;
+  }
+  
+  .form-control {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 180px;
+  }
+  
+  .btn {
+    background-color: #2a6d3c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn:hover {
+    background-color: #1e5631;
+  }
+  
+  .map-container {
+    display: flex;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  #map {
+    height: 600px;
+    flex: 3;
+  }
+  
+  #legend {
+    flex: 1;
+    padding: 15px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #legend h3 {
+    margin-top: 0;
+    color: #2a6d3c;
+    text-align: center;
+  }
+  
+  #colorScale {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px 0;
+  }
+  
+  #info-panel {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+  }
+  
+  #info-panel h4 {
+    margin-top: 0;
+    color: #2a6d3c;
+  }
+  
+  #region-info {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .data-summary {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
+  .data-summary h3 {
+    margin-top: 0;
+    color: #2a6d3c;
+  }
+  
+  #stats {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  
+  .leaflet-popup-content {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  @media (max-width: 768px) {
+    .map-container {
+      flex-direction: column;
+    }
+    
+    #map {
+      height: 400px;
+    }
+    
+    .controls {
+      flex-direction: column;
+    }
+    
+    .form-group {
+      margin: 10px 0;
+    }
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize map
+  const map = L.map('map', { 
+    zoomControl: true,
+    zoomSnap: 0.25,
+    minZoom: 6
+  });
+
+  // Add tile layer with improved styling
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
+
+  // Load GeoJSON data
+  const geojsonData = {{ geojson|safe }};
+  const selectedVar = '{{ selected_var }}';
+  const values = geojsonData.features
+    .map(f => f.properties[selectedVar])
+    .filter(v => v != null && !isNaN(v));
+
+  // Calculate statistics
+  const sum = values.reduce((a, b) => a + b, 0);
+  const avg = sum / values.length;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  
+  // Update statistics display
+  document.getElementById('avg-value').textContent = avg.toFixed(2);
+  document.getElementById('min-value').textContent = min.toFixed(2);
+  document.getElementById('max-value').textContent = max.toFixed(2);
+
+  // Create color scale based on data
+  const colorScale = chroma.scale([
+    '#440154', // Dark purple
+    '#3b528b', // Blue
+    '#21908c', // Teal
+    '#5dc863', // Green
+    '#fde725'  // Yellow
+  ]).domain([min, max]);
+
+  // Style function for GeoJSON features
+  function style(feature) {
+    const value = feature.properties[selectedVar];
+    return {
+      fillColor: value != null ? colorScale(value).hex() : '#cccccc',
+      weight: 1,
+      opacity: 1,
+      color: 'white',
+      dashArray: '3',
+      fillOpacity: 0.8
+    };
+  }
+
+  // Variable to store currently selected feature
+  let currentLayer = null;
+
+  // Handle hover interactions
+  function highlightFeature(e) {
+    const layer = e.target;
+    
+    layer.setStyle({
+      weight: 3,
+      color: '#666',
+      dashArray: '',
+      fillOpacity: 0.9
+    });
+    
+    layer.bringToFront();
+  }
+  
+  function resetHighlight(e) {
+    if (currentLayer !== e.target) {
+      styledLayer.resetStyle(e.target);
+    }
+  }
+  
+  function selectFeature(e) {
+    // Reset previously selected layer if exists
+    if (currentLayer) {
+      styledLayer.resetStyle(currentLayer);
+    }
+    
+    const layer = e.target;
+    currentLayer = layer;
+    
+    layer.setStyle({
+      weight: 3,
+      color: '#ff7800',
+      dashArray: '',
+      fillOpacity: 0.9
+    });
+    
+    const props = layer.feature.properties;
+    const value = props[selectedVar];
+    
+    // Format popup content
+    const popupContent = `
+      <div class="popup-content">
+        <h4>${props.name || 'Region'}</h4>
+        <p><strong>${selectedVar}:</strong> ${value !== null ? value.toFixed(2) : 'No data'}</p>
+      </div>
+    `;
+    
+    // Update info panel
+    document.getElementById('region-info').innerHTML = popupContent;
+    
+    // Show popup on map
+    layer.bindPopup(popupContent).openPopup();
+  }
+
+  // Add interactivity to each feature
+  function onEachFeature(feature, layer) {
+    layer.on({
+      mouseover: highlightFeature,
+      mouseout: resetHighlight,
+      click: selectFeature
+    });
+  }
+
+  // Add styled GeoJSON layer to map
+  const styledLayer = L.geoJSON(geojsonData, {
+    style: style,
+    onEachFeature: onEachFeature
+  }).addTo(map);
+
+  // Set map view to Tunisia
+  const bounds = styledLayer.getBounds();
+  map.fitBounds(bounds, {
+    padding: [20, 20]
+  });
+
+  // Create dynamic legend
+  const colorScaleElement = document.getElementById('colorScale');
+  
+  // Create SVG legend
+  const legendContent = `
+    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+      <svg width="30" height="200">
+        <defs>
+          <linearGradient id="colorGradient" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stop-color="${colorScale(min)}" />
+            <stop offset="25%" stop-color="${colorScale(min + (max-min)*0.25)}" />
+            <stop offset="50%" stop-color="${colorScale(min + (max-min)*0.5)}" />
+            <stop offset="75%" stop-color="${colorScale(min + (max-min)*0.75)}" />
+            <stop offset="100%" stop-color="${colorScale(max)}" />
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="30" height="200" fill="url(#colorGradient)" stroke="#999" />
+      </svg>
+      <div style="display: flex; flex-direction: column; justify-content: space-between; height: 200px; margin-left: 10px; font-size: 12px;">
+        <div>${max.toFixed(2)}</div>
+        <div>${(min + (max-min)*0.75).toFixed(2)}</div>
+        <div>${(min + (max-min)*0.5).toFixed(2)}</div>
+        <div>${(min + (max-min)*0.25).toFixed(2)}</div>
+        <div>${min.toFixed(2)}</div>
+      </div>
+    </div>
+  `;
+  
+  colorScaleElement.innerHTML = legendContent;
+
+  // Add dropdown change event listeners
+  document.getElementById('dataset').addEventListener('change', function() {
+    document.getElementById('mapForm').submit();
+  });
+  
+  document.getElementById('var').addEventListener('change', function() {
+    document.getElementById('mapForm').submit();
+  });
+  
+  // Add map controls
+  L.control.scale({
+    imperial: false,
+    position: 'bottomleft'
+  }).addTo(map);
+});
+</script>
+{% endblock %}

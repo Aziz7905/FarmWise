@@ -16,6 +16,14 @@ statsmodels
 opencv-python
 shapely
 requests
-ipinfo
-langchain langchain-community langchain-huggingface faiss-cpu unstructured python-docx python-dotenv
+plotly
+gdal
+langchain 
+langchain-community 
+langchain-huggingface 
+faiss-cpu 
+unstructured 
+python-docx 
+python-dotenv
+groq
 rank_bm25
