@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
 
-    # AI Model Apps
+    
     'olive_fruit_detection.apps.OliveFruitDetectionConfig',
     'olive_oil_quality.apps.OliveOilQualityConfig',
     'olive_oil_price_forcating.apps.OliveOilPriceForcatingConfig',
@@ -59,8 +59,7 @@ INSTALLED_APPS = [
     'crop_rotation_recommendation.apps.CropRotationRecommendationConfig',
     'crop_soil_suitability.apps.CropSoilSuitabilityConfig',
     'farm_yield_estimator.apps.FarmYieldEstimatorConfig',
-    'soil_composition.apps.SoilCompositionConfig'
-
+    'soil_composition.apps.SoilCompositionConfig',
 ]
 
 
