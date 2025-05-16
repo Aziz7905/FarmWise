@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">🌾 Crop and Soil Suitability</h2>
+
+    <form method="post" class="card p-4 shadow">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Nitrogen (N):</label>
+            <input type="number" step="any" class="form-control" name="N" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Phosphorus (P):</label>
+            <input type="number" step="any" class="form-control" name="P" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Potassium (K):</label>
+            <input type="number" step="any" class="form-control" name="K" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Temperature (°C):</label>
+            <input type="number" step="any" class="form-control" name="temperature" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Humidity (%):</label>
+            <input type="number" step="any" class="form-control" name="humidity" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Soil pH:</label>
+            <input type="number" step="any" class="form-control" name="ph" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Rainfall (mm):</label>
+            <input type="number" step="any" class="form-control" name="rainfall" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Predict Suitable Crop</button>
+    </form>
+
+    {% if predictions %}
+    <div class="mt-4">
+        <h4>🌱 Predicted Crop Suitability (sorted):</h4>
+        <ul class="list-group mt-2">
+            {% for crop, score in predictions.items %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ crop|title }}
+                    <span class="badge bg-success rounded-pill">{{ score|floatformat:2 }}%</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="alert alert-danger mt-4">
+        <strong>Error:</strong> {{ error }}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

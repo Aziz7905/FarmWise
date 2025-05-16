@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import suitability_view
+from .views import predict_crop_view
 
 urlpatterns = [
-    path('suitability/', suitability_view, name='crop_soil_suitability'),
+    path('predict/', predict_crop_view, name='crop_soil_suitability'),
 ]
