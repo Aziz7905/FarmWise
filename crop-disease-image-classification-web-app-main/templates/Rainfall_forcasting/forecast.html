@@ -3,13 +3,14 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h3>🌧 Rainfall Forecast</h3>
+    <h3>🌧 Rainfall Forecast and Crop Water Needs</h3>
 
-    <form method="post" class="mb-4">
+    <form method="post" class="row g-3 mb-4">
         {% csrf_token %}
-        <div class="mb-3">
+        <div class="col-md-4">
             <label for="region" class="form-label">Select Region:</label>
             <select name="region" id="region" class="form-select" required>
+                <option value="">-- Select Region --</option>
                 <option value="Monastir">Monastir</option>
                 <option value="Sidi Bouzid">Sidi Bouzid</option>
                 <option value="Kasserine">Kasserine</option>
@@ -17,12 +18,31 @@
                 <option value="Sousse">Sousse</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Generate Forecast</button>
+        <div class="col-md-4">
+            <label for="crop" class="form-label">Select Crop:</label>
+            <select name="crop" id="crop" class="form-select" required>
+                <option value="">-- Select Crop --</option>
+                {% for crop in crops %}
+                <option value="{{ crop }}">{{ crop }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="start_date" class="form-label">Start Date:</label>
+            <input type="month" class="form-control" name="start_date" required>
+        </div>
+        <div class="col-md-2">
+            <label for="end_date" class="form-label">End Date:</label>
+            <input type="month" class="form-control" name="end_date" required>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary w-100">Generate Forecast</button>
+        </div>
     </form>
 
     {% if forecast_data %}
     <hr>
-    <h5 class="mt-4">📍 Forecast for <strong>{{ region }}</strong></h5>
+    <h5 class="mt-4">📍 Forecast for <strong>{{ region }}</strong> – <strong>{{ crop }}</strong></h5>
 
     <canvas id="rainfallChart" height="100"></canvas>
     <script>
@@ -31,23 +51,47 @@
             type: 'line',
             data: {
                 labels: {{ dates|safe }},
-                datasets: [{
-                    label: 'Predicted Rainfall (mm)',
-                    data: {{ values|safe }},
-                    borderColor: 'rgba(0,123,255,1)',
-                    backgroundColor: 'rgba(0,123,255,0.1)',
-                    fill: true,
-                    tension: 0.3
-                }]
+                datasets: [
+                    {
+                        label: 'Predicted Rainfall (mm)',
+                        data: {{ forecast|safe }},
+                        borderColor: 'rgba(0,123,255,1)',
+                        backgroundColor: 'rgba(0,123,255,0.1)',
+                        fill: true,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Crop ETc (Monthly Need in mm)',
+                        data: Array({{ forecast|length }}).fill({{ etc|floatformat:2 }}),
+                        borderColor: 'rgba(40,167,69,1)',
+                        borderDash: [5,5],
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Deficit (ETc - Forecast)',
+                        data: {{ deficit|safe }},
+                        borderColor: 'rgba(220,53,69,0.8)',
+                        backgroundColor: 'rgba(220,53,69,0.1)',
+                        fill: true,
+                        tension: 0.1
+                    }
+                ]
             },
             options: {
                 responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Rainfall vs Crop Water Requirement (ETc)'
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Rainfall (mm)'
+                            text: 'Millimeters (mm)'
                         }
                     },
                     x: {
@@ -62,10 +106,12 @@
     </script>
 
     <table class="table table-bordered mt-4">
-        <thead>
+        <thead class="table-light">
             <tr>
                 <th>Date</th>
-                <th>Forecast (mm)</th>
+                <th>Rainfall Forecast (mm)</th>
+                <th>ETc (mm)</th>
+                <th>Water Deficit (mm)</th>
             </tr>
         </thead>
         <tbody>
@@ -73,6 +119,8 @@
             <tr>
                 <td>{{ row.Date }}</td>
                 <td>{{ row.Forecast|floatformat:2 }}</td>
+                <td>{{ row.ETc|floatformat:2 }}</td>
+                <td>{{ row.Deficit|floatformat:2 }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -84,6 +132,3 @@
     {% endif %}
 </div>
 {% endblock %}
-
-
-
