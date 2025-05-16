@@ -170,9 +170,14 @@
           </div>
           <div class="card-body p-0">
             <div class="tab-content" id="inventoryTabContent">
-              <!-- Fertilizers Tab -->
-              <div class="tab-pane fade show active" id="fertilizers" role="tabpanel" aria-labelledby="fertilizers-tab">
-                <div class="table-responsive">
+               <!-- Fertilizers Tab -->
+        <div class="tab-pane fade show active" id="fertilizers" role="tabpanel" aria-labelledby="fertilizers-tab">
+          <div class="d-flex justify-content-end p-3 pb-0">
+            <a href="{% url 'add-fertilizer' %}" class="btn btn-sm btn-success">
+              <i class="fas fa-plus me-2"></i>Add Fertilizer
+            </a>
+          </div>
+          <div class="table-responsive">
                   <table class="table table-hover inventory-table" id="fertilizersTable">
                     <thead class="table-light">
                       <tr>
@@ -219,9 +224,14 @@
                 </div>
               </div>
               
-              <!-- Pesticides Tab -->
-              <div class="tab-pane fade" id="pesticides" role="tabpanel" aria-labelledby="pesticides-tab">
-                <div class="table-responsive">
+                <!-- Pesticides Tab -->
+        <div class="tab-pane fade" id="pesticides" role="tabpanel" aria-labelledby="pesticides-tab">
+          <div class="d-flex justify-content-end p-3 pb-0">
+            <a href="{% url 'add-pesticide' %}" class="btn btn-sm btn-success">
+              <i class="fas fa-plus me-2"></i>Add Pesticide
+            </a>
+          </div>
+          <div class="table-responsive">
                   <table class="table table-hover inventory-table" id="pesticidesTable">
                     <thead class="table-light">
                       <tr>
@@ -268,9 +278,14 @@
                 </div>
               </div>
               
-              <!-- Materials Tab -->
-              <div class="tab-pane fade" id="materials" role="tabpanel" aria-labelledby="materials-tab">
-                <div class="table-responsive">
+               <!-- Materials Tab -->
+        <div class="tab-pane fade" id="materials" role="tabpanel" aria-labelledby="materials-tab">
+          <div class="d-flex justify-content-end p-3 pb-0">
+            <a href="{% url 'add-material' %}" class="btn btn-sm btn-success">
+              <i class="fas fa-plus me-2"></i>Add Material
+            </a>
+          </div>
+          <div class="table-responsive">
                   <table class="table table-hover inventory-table" id="materialsTable">
                     <thead class="table-light">
                       <tr>
@@ -314,100 +329,100 @@
       </section>
 
    <div class="container-fluid">
-  <!-- Fields & Trees Row -->
-  <div class="row g-4 mb-4">
-    <!-- Crop Fields Section -->
-    <div class="col-12 col-lg-6">
-      <div class="card h-100 border-0 shadow-sm">
-        <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
-          <h5 class="card-title mb-0">Crop Fields</h5>
-          <a href="{% url 'add-cropfield' %}" class="btn btn-sm btn-success">
-            <i class="fas fa-plus me-2"></i>Add Field
-          </a>
-        </div>
-        <div class="card-body pt-0">
-          <div id="cropFieldsChart" class="mb-4" style="height: 200px;"></div>
-          <div class="table-responsive">
-            <table class="table table-sm table-hover">
-              <thead class="table-light">
-                <tr>
-                  <th class="ps-3">Name</th>
-                  <th>Area (ha)</th>
-                  <th>Stage</th>
-                  <th class="pe-3 text-end">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for field in fields %}
-                <tr>
-                  <td class="ps-3">{{ field.name }}</td>
-                  <td>{{ field.area }}</td>
-                  <td>
-                    <span class="badge {% if field.stage == 'Planting' %}bg-primary{% elif field.stage == 'Growing' %}bg-success{% elif field.stage == 'Harvesting' %}bg-warning{% else %}bg-secondary{% endif %}">
-                      {{ field.stage }}
-                    </span>
-                  </td>
-                  <td class="pe-3 text-end">
-                    <button class="btn btn-sm btn-link text-primary p-0">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                  </td>
-                </tr>
-                {% empty %}
-                <tr>
-                  <td colspan="4" class="text-center text-muted py-3">No fields defined</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
+<!-- Fields & Trees Row -->
+<div class="row g-4 mb-4">
+  <!-- Crop Fields Section -->
+  <div class="col-12 col-lg-6">
+    <div class="card h-100 border-0 shadow-sm">
+      <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">Crop Fields</h5>
+        <a href="{% url 'add-cropfield' %}" class="btn btn-sm btn-success">
+          <i class="fas fa-plus me-2"></i>Add Field
+        </a>
       </div>
-    </div>
-
-    <!-- Trees Section -->
-    <div class="col-12 col-lg-6">
-      <div class="card h-100 border-0 shadow-sm">
-        <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
-          <h5 class="card-title mb-0">Trees</h5>
-          <a href="{% url 'add-tree' %}" class="btn btn-sm btn-success">
-            <i class="fas fa-plus me-2"></i>Add Trees
-          </a>
+      <div class="card-body pt-0">
+        <div class="table-responsive mb-4">
+          <table class="table table-sm table-hover">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-3">Name</th>
+                <th>Area (ha)</th>
+                <th>Stage</th>
+                <th class="pe-3 text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for field in fields %}
+              <tr>
+                <td class="ps-3">{{ field.name }}</td>
+                <td>{{ field.area }}</td>
+                <td>
+                  <span class="badge {% if field.stage == 'Planting' %}bg-primary{% elif field.stage == 'Growing' %}bg-success{% elif field.stage == 'Harvesting' %}bg-warning{% else %}bg-secondary{% endif %}">
+                    {{ field.stage }}
+                  </span>
+                </td>
+                <td class="pe-3 text-end">
+                  <button class="btn btn-sm btn-link text-primary p-0">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4" class="text-center text-muted py-3">No fields defined</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-        <div class="card-body pt-0">
-          <div id="treesChart" class="mb-4" style="height: 200px;"></div>
-          <div class="table-responsive">
-            <table class="table table-sm table-hover">
-              <thead class="table-light">
-                <tr>
-                  <th class="ps-3">Type</th>
-                  <th>Count</th>
-                  <th class="pe-3 text-end">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for tree in trees %}
-                <tr>
-                  <td class="ps-3">{{ tree.tree_name }}</td>
-                  <td>{{ tree.count }}</td>
-                  <td class="pe-3 text-end">
-                    <button class="btn btn-sm btn-link text-primary p-0 edit-tree" data-id="{{ tree.id }}">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                  </td>
-                </tr>
-                {% empty %}
-                <tr>
-                  <td colspan="3" class="text-center text-muted py-3">No trees recorded</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <div id="cropFieldsChart" style="height: 200px;"></div>
       </div>
     </div>
   </div>
+
+  <!-- Trees Section -->
+  <div class="col-12 col-lg-6">
+    <div class="card h-100 border-0 shadow-sm">
+      <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">Trees</h5>
+        <a href="{% url 'add-tree' %}" class="btn btn-sm btn-success">
+          <i class="fas fa-plus me-2"></i>Add Trees
+        </a>
+      </div>
+      <div class="card-body pt-0">
+        <div class="table-responsive mb-4">
+          <table class="table table-sm table-hover">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-3">Type</th>
+                <th>Count</th>
+                <th class="pe-3 text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for tree in trees %}
+              <tr>
+                <td class="ps-3">{{ tree.tree_name }}</td>
+                <td>{{ tree.count }}</td>
+                <td class="pe-3 text-end">
+                  <button class="btn btn-sm btn-link text-primary p-0 edit-tree" data-id="{{ tree.id }}">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="3" class="text-center text-muted py-3">No trees recorded</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div id="treesChart" style="height: 200px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- Tasks & Notes Row -->
   <div class="row g-4">
