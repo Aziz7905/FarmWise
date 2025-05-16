@@ -27,3 +27,4 @@ python-docx
 python-dotenv
 groq
 rank_bm25
+stripe

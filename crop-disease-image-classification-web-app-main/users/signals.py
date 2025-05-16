@@ -7,7 +7,3 @@ from .models import FarmerProfile
 def create_farmer_profile(sender, instance, created, **kwargs):
     if created:
         FarmerProfile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_farmer_profile(sender, instance, **kwargs):
-    instance.farmerprofile.save()

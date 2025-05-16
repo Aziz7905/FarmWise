@@ -1,81 +1,742 @@
+
 {% extends "base.html" %}
 {% block content %}
-<div class="container my-4">
-  <!-- Action buttons -->
-  <div class="mb-4 d-flex justify-content-end flex-wrap gap-2">
-    <a href="{% url 'profile' %}" class="btn btn-outline-primary">Update Farm Info</a>
-    <a href="{% url 'add-fertilizer' %}" class="btn btn-outline-success">+ Fertilizer</a>
-    <a href="{% url 'add-pesticide' %}" class="btn btn-outline-success">+ Pesticide</a>
-    <a href="{% url 'add-material' %}" class="btn btn-outline-success">+ Material</a>
-    <a href="{% url 'add-cropfield' %}" class="btn btn-outline-info">+ Field</a>
-    <a href="{% url 'add-tree' %}" class="btn btn-outline-info">+ Tree</a>
-    <a href="{% url 'add-task' %}" class="btn btn-outline-warning">+ Task</a>
-    <a href="{% url 'add-note' %}" class="btn btn-outline-secondary">+ Note</a>
+<div class="dashboard-container">
+  <!-- Top Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-4 shadow-sm sticky-top">
+    <div class="container-fluid">
+      <h2 class="navbar-brand fw-bold m-0">Farm Management Dashboard</h2>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#inventory">Inventory</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#fields">Fields</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#trees">Trees</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#tasks">Tasks</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#notes">Notes</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center">
+          <div class="subscription-badge me-3">
+            <span class="badge bg-primary rounded-pill px-3 py-2 fw-normal">
+              Subscription: <strong>{{ current_plan }}</strong>
+              {% if current_plan == "FREE" %}
+              <a href="{% url 'pricing' %}" class="text-white ms-2 text-decoration-none"><i class="fas fa-arrow-circle-up"></i> Upgrade</a>
+              {% endif %}
+            </span>
+          </div>
+         
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid px-4">
+    <!-- Dashboard Overview -->
+    <div class="row g-4 mb-4">
+      <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="stat-icon bg-primary text-white">
+                <i class="fas fa-tractor"></i>
+              </div>
+              <div class="ms-3">
+                <h6 class="card-subtitle mb-1 text-muted">Fields</h6>
+                <h3 class="card-title mb-0">{{ fields|length }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="stat-icon bg-success text-white">
+                <i class="fas fa-tree"></i>
+              </div>
+              <div class="ms-3">
+                <h6 class="card-subtitle mb-1 text-muted">Trees</h6>
+                <h3 class="card-title mb-0">{{ trees|length }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="stat-icon bg-warning text-white">
+                <i class="fas fa-tasks"></i>
+              </div>
+              <div class="ms-3">
+                <h6 class="card-subtitle mb-1 text-muted">Pending Tasks</h6>
+                <h3 class="card-title mb-0">{{ tasks|length }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="stat-icon bg-info text-white">
+                <i class="fas fa-warehouse"></i>
+              </div>
+              <div class="ms-3">
+                <h6 class="card-subtitle mb-1 text-muted">Inventory Items</h6>
+                <h3 class="card-title mb-0">{{ fertilizers|length|add:pesticides|length|add:materials|length }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Farm Visualization -->
+    <div class="row mb-4">
+      <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Fields Overview</h5>
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-secondary active" id="viewMap">Map View</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="viewTable">Table View</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="farmMap" style="height: 400px; position: relative;">
+              <!-- Farm map visualization will be loaded here -->
+              <div class="farm-map-placeholder text-center">
+                <img src="/api/placeholder/700/400" alt="Farm Map Visualization" class="img-fluid"/>
+                <div class="map-overlay">
+                  <i class="fas fa-map-marker-alt me-2"></i> Interactive farm map
+                </div>
+              </div>
+            </div>
+            <div id="farmTable" class="mt-3 d-none">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle" id="fieldsTable">
+                  <thead>
+                    <tr>
+                      <th>Field Name</th>
+                      <th>Area (ha)</th>
+                      <th>Stage</th>
+                      <th>Next Action</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for field in fields %}
+                    <tr>
+                      <td>{{ field.name }}</td>
+                      <td>{{ field.area }}</td>
+                      <td>
+                        <span class="badge rounded-pill {% if field.stage == 'Planting' %}bg-primary{% elif field.stage == 'Growing' %}bg-success{% elif field.stage == 'Harvesting' %}bg-warning{% else %}bg-secondary{% endif %}">
+                          {{ field.stage }}
+                        </span>
+                      </td>
+                      <td>{{ field.next_action }}</td>
+                      <td>
+                        <div class="btn-group btn-group-sm">
+                          <button type="button" class="btn btn-outline-primary btn-sm field-details" data-id="{{ field.id }}">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                          <button type="button" class="btn btn-outline-secondary btn-sm field-edit" data-id="{{ field.id }}">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="5" class="text-center text-muted py-4">No fields defined. <a href="{% url 'add-cropfield' %}">Add your first field</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-header bg-white">
+            <h5 class="card-title mb-0">Weather Forecast</h5>
+          </div>
+          <div class="card-body p-0">
+            <div class="weather-container">
+              <div class="weather-header p-3 text-center">
+                <div class="weather-icon">
+                  <i class="fas fa-cloud-sun fa-3x"></i>
+                </div>
+                <h3 class="temperature">24°C</h3>
+                <p class="mb-0">Partly Cloudy</p>
+                <p class="location text-muted mb-0">Farm Location</p>
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <span><i class="fas fa-temperature-high me-2"></i> Humidity</span>
+                  <span>65%</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <span><i class="fas fa-wind me-2"></i> Wind</span>
+                  <span>12 km/h</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <span><i class="fas fa-tint me-2"></i> Precipitation</span>
+                  <span>10%</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <span><i class="fas fa-sun me-2"></i> UV Index</span>
+                  <span>Moderate</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="card-footer bg-white text-center">
+            <small class="text-muted">Updated today at 10:00 AM</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inventory Section -->
+    <section id="inventory" class="mb-5">
+      <div class="section-header d-flex justify-content-between align-items-center mb-4">
+        <h3 class="section-title">Inventory Management</h3>
+        <div class="search-box">
+          <div class="input-group">
+            <input type="text" class="form-control" id="inventorySearch" placeholder="Search inventory...">
+            <button class="btn btn-outline-secondary" type="button"><i class="fas fa-search"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white p-3">
+          <ul class="nav nav-tabs card-header-tabs" id="inventoryTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="fertilizers-tab" data-bs-toggle="tab" data-bs-target="#fertilizers" type="button" role="tab">Fertilizers</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="pesticides-tab" data-bs-toggle="tab" data-bs-target="#pesticides" type="button" role="tab">Pesticides</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="materials-tab" data-bs-toggle="tab" data-bs-target="#materials" type="button" role="tab">Materials</button>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body p-0">
+          <div class="tab-content" id="inventoryTabContent">
+            <!-- Fertilizers Tab -->
+            <div class="tab-pane fade show active" id="fertilizers" role="tabpanel" aria-labelledby="fertilizers-tab">
+              <div class="table-responsive">
+                <table class="table table-hover inventory-table" id="fertilizersTable">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Name</th>
+                      <th>Quantity</th>
+                      <th>Date Added</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in fertilizers %}
+                    <tr class="inventory-item" data-item-type="fertilizer" data-item-name="{{ item.name }}" data-item-id="{{ item.id }}">
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.quantity }} kg</td>
+                      <td>{{ item.date }}</td>
+                      <td>
+                        {% if item.quantity > 20 %}
+                        <span class="badge bg-success">In Stock</span>
+                        {% elif item.quantity > 5 %}
+                        <span class="badge bg-warning text-dark">Low Stock</span>
+                        {% else %}
+                        <span class="badge bg-danger">Reorder</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        <div class="btn-group btn-group-sm">
+                          <button type="button" class="btn btn-outline-primary btn-sm edit-inventory" data-type="fertilizer" data-id="{{ item.id }}">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                          <button type="button" class="btn btn-outline-danger btn-sm delete-inventory" data-type="fertilizer" data-id="{{ item.id }}">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="5" class="text-center text-muted py-4">No fertilizers found. <a href="{% url 'add-fertilizer' %}">Add fertilizer</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <!-- Pesticides Tab -->
+            <div class="tab-pane fade" id="pesticides" role="tabpanel" aria-labelledby="pesticides-tab">
+              <div class="table-responsive">
+                <table class="table table-hover inventory-table" id="pesticidesTable">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Name</th>
+                      <th>Quantity</th>
+                      <th>Date Added</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in pesticides %}
+                    <tr class="inventory-item" data-item-type="pesticide" data-item-name="{{ item.name }}" data-item-id="{{ item.id }}">
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.quantity }} L</td>
+                      <td>{{ item.date }}</td>
+                      <td>
+                        {% if item.quantity > 10 %}
+                        <span class="badge bg-success">In Stock</span>
+                        {% elif item.quantity > 3 %}
+                        <span class="badge bg-warning text-dark">Low Stock</span>
+                        {% else %}
+                        <span class="badge bg-danger">Reorder</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        <div class="btn-group btn-group-sm">
+                          <button type="button" class="btn btn-outline-primary btn-sm edit-inventory" data-type="pesticide" data-id="{{ item.id }}">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                          <button type="button" class="btn btn-outline-danger btn-sm delete-inventory" data-type="pesticide" data-id="{{ item.id }}">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="5" class="text-center text-muted py-4">No pesticides found. <a href="{% url 'add-pesticide' %}">Add pesticide</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <!-- Materials Tab -->
+            <div class="tab-pane fade" id="materials" role="tabpanel" aria-labelledby="materials-tab">
+              <div class="table-responsive">
+                <table class="table table-hover inventory-table" id="materialsTable">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Name</th>
+                      <th>Quantity</th>
+                      <th>Unit</th>
+                      <th>Date Added</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in materials %}
+                    <tr class="inventory-item" data-item-type="material" data-item-name="{{ item.name }}" data-item-id="{{ item.id }}">
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.quantity }}</td>
+                      <td>{{ item.unit }}</td>
+                      <td>{{ item.date }}</td>
+                      <td>
+                        <div class="btn-group btn-group-sm">
+                          <button type="button" class="btn btn-outline-primary btn-sm edit-inventory" data-type="material" data-id="{{ item.id }}">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                          <button type="button" class="btn btn-outline-danger btn-sm delete-inventory" data-type="material" data-id="{{ item.id }}">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="5" class="text-center text-muted py-4">No materials found. <a href="{% url 'add-material' %}">Add material</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="row g-4 mb-5">
+      <!-- Fields & Trees Sections -->
+      <div class="col-md-6">
+        <section id="fields" class="h-100">
+          <div class="section-header d-flex justify-content-between align-items-center mb-3">
+            <h3 class="section-title">Crop Fields</h3>
+            <a href="{% url 'add-cropfield' %}" class="btn btn-sm btn-outline-success">
+              <i class="fas fa-plus"></i> Add Field
+            </a>
+          </div>
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div id="cropFieldsChart" style="height: 220px;"></div>
+              <div class="table-responsive mt-3">
+                <table class="table table-sm">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Name</th>
+                      <th>Area (ha)</th>
+                      <th>Stage</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for field in fields %}
+                    <tr>
+                      <td>{{ field.name }}</td>
+                      <td>{{ field.area }}</td>
+                      <td>
+                        <span class="badge rounded-pill {% if field.stage == 'Planting' %}bg-primary{% elif field.stage == 'Growing' %}bg-success{% elif field.stage == 'Harvesting' %}bg-warning{% else %}bg-secondary{% endif %}">
+                          {{ field.stage }}
+                        </span>
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="3" class="text-center text-muted">No fields defined.</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      
+      <div class="col-md-6">
+        <section id="trees" class="h-100">
+          <div class="section-header d-flex justify-content-between align-items-center mb-3">
+            <h3 class="section-title">Trees</h3>
+            <a href="{% url 'add-tree' %}" class="btn btn-sm btn-outline-success">
+              <i class="fas fa-plus"></i> Add Trees
+            </a>
+          </div>
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div id="treesChart" style="height: 220px;"></div>
+              <div class="table-responsive mt-3">
+                <table class="table table-sm">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Type</th>
+                      <th>Count</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for tree in trees %}
+                    <tr>
+                      <td>{{ tree.tree_name }}</td>
+                      <td>{{ tree.count }}</td>
+                      <td>
+                        <button type="button" class="btn btn-outline-primary btn-sm edit-tree" data-id="{{ tree.id }}">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="3" class="text-center text-muted">No trees recorded.</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+      <!-- Tasks Section -->
+      <div class="col-lg-7">
+        <section id="tasks">
+          <div class="section-header d-flex justify-content-between align-items-center mb-3">
+            <h3 class="section-title">Tasks Management</h3>
+            <div>
+              <div class="input-group">
+                <input type="text" class="form-control form-control-sm" id="taskSearch" placeholder="Search tasks...">
+                <a href="{% url 'add-task' %}" class="btn btn-sm btn-outline-success">
+                  <i class="fas fa-plus"></i> New Task
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table align-middle" id="tasksTable">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="width: 50px;"></th>
+                      <th>Description</th>
+                      <th>Date</th>
+                      <th>Priority</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for task in tasks %}
+                    <tr class="task-item" data-task-id="{{ task.id }}">
+                      <td class="text-center">
+                        <div class="form-check">
+                          <input class="form-check-input task-complete" type="checkbox" value="" id="task{{ task.id }}">
+                        </div>
+                      </td>
+                      <td>{{ task.description }}</td>
+                      <td>{{ task.date }}</td>
+                      <td>
+                        {% if task.priority == 'High' %}
+                        <span class="badge bg-danger">High</span>
+                        {% elif task.priority == 'Medium' %}
+                        <span class="badge bg-warning text-dark">Medium</span>
+                        {% else %}
+                        <span class="badge bg-info text-dark">Low</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        <span class="badge bg-secondary">Pending</span>
+                      </td>
+                      <td>
+                        <div class="btn-group btn-group-sm">
+                          <button type="button" class="btn btn-outline-primary edit-task" data-id="{{ task.id }}">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                          <button type="button" class="btn btn-outline-danger delete-task" data-id="{{ task.id }}">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="6" class="text-center text-muted py-4">No upcoming tasks</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      
+      <!-- Notes Section -->
+      <div class="col-lg-5">
+        <section id="notes">
+          <div class="section-header d-flex justify-content-between align-items-center mb-3">
+            <h3 class="section-title">Notes</h3>
+            <a href="{% url 'add-note' %}" class="btn btn-sm btn-outline-success">
+              <i class="fas fa-plus"></i> Add Note
+            </a>
+          </div>
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+              <div class="notes-container">
+                {% for note in notes %}
+                <div class="note-item p-3 border-bottom">
+                  <div class="d-flex justify-content-between">
+                    <h6 class="mb-2">Note #{{ forloop.counter }}</h6>
+                    <small class="text-muted">{{ note.created_at|date:"M d, Y H:i" }}</small>
+                  </div>
+                  <p class="mb-1">{{ note.content }}</p>
+                  <div class="note-actions mt-2">
+                    <button class="btn btn-sm btn-outline-primary edit-note" data-id="{{ note.id }}">
+                      <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger delete-note" data-id="{{ note.id }}">
+                      <i class="fas fa-trash"></i> Delete
+                    </button>
+                  </div>
+                </div>
+                {% empty %}
+                <div class="text-center text-muted py-5">
+                  <i class="fas fa-sticky-note fa-3x mb-3"></i>
+                  <p>No notes recorded</p>
+                  <a href="{% url 'add-note' %}" class="btn btn-sm btn-outline-primary">Add your first note</a>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
   </div>
-
-  <!-- Inventory Management Section -->
-  <h4 class="mb-3">🧪 Fertilizers</h4>
-  <table class="table table-striped">
-    <thead><tr><th>Name</th><th>Quantity</th><th>Date</th></tr></thead>
-    <tbody>
-      {% for item in fertilizers %}
-      <tr><td>{{ item.name }}</td><td>{{ item.quantity }} kg</td><td>{{ item.date }}</td></tr>
-      {% empty %}<tr><td colspan="3">No fertilizers found.</td></tr>{% endfor %}
-    </tbody>
-  </table>
-
-  <h4 class="mt-5 mb-3">🧴 Pesticides</h4>
-  <table class="table table-striped">
-    <thead><tr><th>Name</th><th>Quantity</th><th>Date</th></tr></thead>
-    <tbody>
-      {% for item in pesticides %}
-      <tr><td>{{ item.name }}</td><td>{{ item.quantity }} L</td><td>{{ item.date }}</td></tr>
-      {% empty %}<tr><td colspan="3">No pesticides found.</td></tr>{% endfor %}
-    </tbody>
-  </table>
-
-  <h4 class="mt-5 mb-3">🧰 Materials</h4>
-  <table class="table table-striped">
-    <thead><tr><th>Name</th><th>Quantity</th><th>Unit</th><th>Date</th></tr></thead>
-    <tbody>
-      {% for item in materials %}
-      <tr><td>{{ item.name }}</td><td>{{ item.quantity }}</td><td>{{ item.unit }}</td><td>{{ item.date }}</td></tr>
-      {% empty %}<tr><td colspan="4">No materials found.</td></tr>{% endfor %}
-    </tbody>
-  </table>
-
-  <h4 class="mt-5 mb-3">🌳 Trees by Type</h4>
-  <table class="table table-striped">
-    <thead><tr><th>Tree</th><th>Count</th></tr></thead>
-    <tbody>
-      {% for tree in trees %}
-      <tr><td>{{ tree.tree_name }}</td><td>{{ tree.count }}</td></tr>
-      {% empty %}<tr><td colspan="2">No trees recorded.</td></tr>{% endfor %}
-    </tbody>
-  </table>
-
-  <h4 class="mt-5 mb-3">🌾 Crop Fields</h4>
-  <table class="table table-striped">
-    <thead><tr><th>Name</th><th>Area (ha)</th><th>Stage</th><th>Next Action</th></tr></thead>
-    <tbody>
-      {% for field in fields %}
-      <tr><td>{{ field.name }}</td><td>{{ field.area }}</td><td>{{ field.stage }}</td><td>{{ field.next_action }}</td></tr>
-      {% empty %}<tr><td colspan="4">No fields defined.</td></tr>{% endfor %}
-    </tbody>
-  </table>
-
-  <h4 class="mt-5 mb-3">📅 Upcoming Tasks</h4>
-  <ul class="list-group mb-4">
-    {% for task in tasks %}
-    <li class="list-group-item">{{ task.date }} — {{ task.description }}</li>
-    {% empty %}<li class="list-group-item">No upcoming tasks</li>{% endfor %}
-  </ul>
-
-  <h4 class="mt-5 mb-3">📝 Notes</h4>
-  <ul class="list-group">
-    {% for note in notes %}
-    <li class="list-group-item">{{ note.content }} <span class="text-muted float-end">{{ note.created_at|date:"M d, Y H:i" }}</span></li>
-    {% empty %}<li class="list-group-item">No notes recorded.</li>{% endfor %}
-  </ul>
 </div>
+
+<!-- Modal for Field Details -->
+<div class="modal fade" id="fieldDetailModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Field Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="fieldDetailContent">
+          <!-- Content will be loaded dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Edit Field</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript Section -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Toggle farm map and table view
+    const mapViewBtn = document.getElementById("viewMap");
+    const tableViewBtn = document.getElementById("viewTable");
+    const map = document.getElementById("farmMap");
+    const table = document.getElementById("farmTable");
+
+    mapViewBtn.addEventListener("click", function () {
+      map.classList.remove("d-none");
+      table.classList.add("d-none");
+      mapViewBtn.classList.add("active");
+      tableViewBtn.classList.remove("active");
+    });
+
+    tableViewBtn.addEventListener("click", function () {
+      map.classList.add("d-none");
+      table.classList.remove("d-none");
+      tableViewBtn.classList.add("active");
+      mapViewBtn.classList.remove("active");
+    });
+
+    // Inventory search
+    const searchInput = document.getElementById("inventorySearch");
+    searchInput.addEventListener("input", function () {
+      const query = this.value.toLowerCase();
+      document.querySelectorAll(".inventory-item").forEach(function (item) {
+        const name = item.getAttribute("data-item-name").toLowerCase();
+        item.style.display = name.includes(query) ? "table-row" : "none";
+      });
+    });
+
+    // Task search
+    const taskSearch = document.getElementById("taskSearch");
+    taskSearch.addEventListener("input", function () {
+      const value = this.value.toLowerCase();
+      document.querySelectorAll("#tasksTable tbody tr").forEach(tr => {
+        const text = tr.innerText.toLowerCase();
+        tr.style.display = text.includes(value) ? "table-row" : "none";
+      });
+    });
+  });
+</script>
+
+<style>
+/* Base Styles */
+.dashboard-container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Section Headers */
+.section-header {
+  padding: 1rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.section-title {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Stat Cards */
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+/* Weather */
+.weather-header {
+  background: linear-gradient(to right, #f6f9fc, #e9f2f9);
+}
+.weather-icon {
+  margin-bottom: 0.5rem;
+}
+.temperature {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* Modals */
+.modal .modal-body {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Tables */
+.table-sm th, .table-sm td {
+  padding: 0.5rem;
+}
+
+/* Placeholder for farm map */
+.farm-map-placeholder {
+  position: relative;
+  background-color: #f1f1f1;
+  padding: 1rem;
+}
+.map-overlay {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.85);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Notes */
+.note-item {
+  background-color: #fefefe;
+  border-left: 4px solid #0d6efd;
+  margin-bottom: 0.5rem;
+}
+</style>
 {% endblock %}

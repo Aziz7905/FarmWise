@@ -12,6 +12,10 @@ from .forms import (
 )
 from .models import FarmerPost
 
+from payments.models import SubscriptionPlan, FarmerSubscription
+from payments.enum import SubscriptionTier
+
+
 def homepage(request):
     return render(request, 'defaulthomepage.html') 
 
@@ -21,11 +25,24 @@ def register(request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
+
+           
+            profile = user.farmerprofile  
+            free_plan = SubscriptionPlan.objects.filter(tier=SubscriptionTier.FREE.name).first()
+            if free_plan:
+                FarmerSubscription.objects.create(
+                    farmer=profile,
+                    plan=free_plan,
+                    stripe_customer_id='free-internal',  
+                    active=True
+                )
+
             messages.success(request, f'Account created for {user.username}! You can now log in.')
             return redirect('login')
     else:
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
+
 
 
 @login_required
@@ -211,6 +228,8 @@ def add_note(request):
 @login_required
 def dashboard(request):
     profile = request.user.farmerprofile
+    subscription = getattr(profile, 'farmersubscription', None)
+    current_plan = subscription.plan.tier if subscription and subscription.active else "FREE"
     context = {
         'profile': profile,
         'fertilizers': profile.fertilizers.all(),
@@ -219,7 +238,8 @@ def dashboard(request):
         'trees': profile.trees.all(),
         'fields': profile.cropfield_set.all(),
         'tasks': profile.croptask_set.all().order_by('date')[:5],
-        'notes': profile.note_set.all()
+        'notes': profile.note_set.all(),
+        'current_plan': current_plan,
     }
     return render(request, 'users/dashboard.html', context)
 

@@ -255,111 +255,124 @@
 
 <!-- Service Start -->
 <div class="container-xxl py-5">
-    <div class="container">
-        <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-            <p class="fs-5 fw-bold text-primary">Our Services</p>
-            <h1 class="display-5 mb-5">Smart Solutions for Sustainable Farming</h1>
+   <div class="row g-4">
+
+        
+        {% if user.is_authenticated and user.farmerprofile.farmersubscription.plan.tier in "PREMIUM" %}
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="service-item rounded d-flex h-100">
+            <div class="service-img rounded">
+                <img class="img-fluid" src="../static/img/plantscanner.png" alt="">
+            </div>
+            <div class="service-text rounded p-5">
+                <div class="btn-square rounded-circle mx-auto mb-3">
+                <img class="img-fluid" src="../static/img/icon/icon-3.png" alt="Icon">
+                </div>
+                <h4 class="mb-3">Plant Disease Detection</h4>
+                <p class="mb-4">Scan plants and get real-time AI analysis of diseases and treatments.</p>
+                <a class="btn btn-sm" href="{% url 'home' %}"><i class="fa fa-plus text-primary me-2"></i>Try Now</a>
+            </div>
+            </div>
         </div>
-        <div class="row g-4">
+        {% endif %}
 
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="service-item rounded d-flex h-100">
-                    <div class="service-img rounded">
-                        <img class="img-fluid" src="../static/img/plantscanner.png" alt="">
-                    </div>
-                    <div class="service-text rounded p-5">
-                        <div class="btn-square rounded-circle mx-auto mb-3">
-                            <img class="img-fluid" src="../static/img/icon/icon-3.png" alt="Icon">
-                        </div>
-                        <h4 class="mb-3">Plant Disease Detection</h4>
-                        <p class="mb-4">Scan plants with your phone and get real-time insights about diseases and treatment suggestions using AI.</p>
-                        <a class="btn btn-sm" href="{% url 'home' %}"><i class="fa fa-plus text-primary me-2"></i>Try Now</a>
-                    </div>
-                </div>
+        {% if user.is_authenticated and user.farmerprofile.farmersubscription.plan.tier in "STANDARD PREMIUM" %}
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+            <div class="service-item rounded d-flex h-100">
+            <div class="service-img rounded">
+                <img class="img-fluid" src="../static/img/cropsoil.jpg" alt="">
             </div>
-
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                <div class="service-item rounded d-flex h-100">
-                    <div class="service-img rounded">
-                        <img class="img-fluid" src="../static/img/cropsoil.jpg" alt="">
-                    </div>
-                    <div class="service-text rounded p-5">
-                        <div class="btn-square rounded-circle mx-auto mb-3">
-                            <img class="img-fluid" src="../static/img/icon/icon-6.png" alt="Icon">
-                        </div>
-                        <h4 class="mb-3">Crop & Soil Suitability</h4>
-                        <p class="mb-4">Discover which crops are best suited for your soil type and region using intelligent data analysis.</p>
-                        <a class="btn btn-sm" href="{% url 'crop_soil_suitability' %}"><i class="fa fa-plus text-primary me-2"></i>Learn More</a>
-                    </div>
+            <div class="service-text rounded p-5">
+                <div class="btn-square rounded-circle mx-auto mb-3">
+                <img class="img-fluid" src="../static/img/icon/icon-6.png" alt="Icon">
                 </div>
+                <h4 class="mb-3">Crop & Soil Suitability</h4>
+                <p class="mb-4">Discover the best crops for your land using intelligent soil analysis.</p>
+                <a class="btn btn-sm" href="{% url 'crop_soil_suitability' %}"><i class="fa fa-plus text-primary me-2"></i>Learn More</a>
             </div>
-
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                <div class="service-item rounded d-flex h-100">
-                    <div class="service-img rounded">
-                        <img class="img-fluid" src="../static/img/estimation.png" alt="">
-                    </div>
-                    <div class="service-text rounded p-5">
-                        <div class="btn-square rounded-circle mx-auto mb-3">
-                            <img class="img-fluid" src="../static/img/icon/icon-5.png" alt="Icon">
-                        </div>
-                        <h4 class="mb-3">Yield Estimation</h4>
-                        <p class="mb-4">Estimate your olive harvest yield effortlessly through image recognition and smart prediction tools.</p>
-                        <a class="btn btn-sm" href="{% url 'yield_estimate' %}"><i class="fa fa-plus text-primary me-2"></i>Get Estimate</a>
-                    </div>
-                </div>
             </div>
-
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="service-item rounded d-flex h-100">
-                    <div class="service-img rounded">
-                        <img class="img-fluid" src="../static/img/evoo-7c819bcdd0c343a7bae114cbc9baea2f.jpg" alt="">
-                    </div>
-                    <div class="service-text rounded p-5">
-                        <div class="btn-square rounded-circle mx-auto mb-3">
-                            <img class="img-fluid" src="../static/img/icon/icon-4.png" alt="Icon">
-                        </div>
-                        <h4 class="mb-3">Olive Quality Analysis</h4>
-                        <p class="mb-4">Assess the quality of your olive production using computer vision to ensure optimal harvest.</p>
-                        <a class="btn btn-sm" href="{% url 'analyse_olive_quality' %}"><i class="fa fa-plus text-primary me-2"></i>Analyze Now</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                <div class="service-item rounded d-flex h-100">
-                    <div class="service-img rounded">
-                        <img class="img-fluid" src="../static/img/rain.jpg" alt="">
-                    </div>
-                    <div class="service-text rounded p-5">
-                        <div class="btn-square rounded-circle mx-auto mb-3">
-                            <img class="img-fluid" src="../static/img/icon/icon-8.png" alt="Icon">
-                        </div>
-                        <h4 class="mb-3">Rainfall Forecasting</h4>
-                        <p class="mb-4">Stay ahead of the weather. Access short-term and seasonal rainfall forecasts for smarter planning.</p>
-                        <a class="btn btn-sm" href="{% url 'rainfall_forecast' %}"><i class="fa fa-plus text-primary me-2"></i>Check Forecast</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                <div class="service-item rounded d-flex h-100">
-                    <div class="service-img rounded">
-                        <img class="img-fluid" src="../static/img/forcast.png" alt="">
-                    </div>
-                    <div class="service-text rounded p-5">
-                        <div class="btn-square rounded-circle mx-auto mb-3">
-                            <img class="img-fluid" src="../static/img/icon/icon-2.png" alt="Icon">
-                        </div>
-                        <h4 class="mb-3">Market Price Forecasting</h4>
-                        <p class="mb-4">Access AI-powered market insights to forecast crop prices and maximize profit margins.</p>
-                        <a class="btn btn-sm" href="{% url 'forecast_price' %}"><i class="fa fa-plus text-primary me-2"></i>View Trends</a>
-                    </div>
-                </div>
-            </div>
-
         </div>
-    </div>
+        {% endif %}
+
+        
+
+        {% if user.is_authenticated and user.farmerprofile.farmersubscription.plan.tier == "PREMIUM" %}
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+            <div class="service-item rounded d-flex h-100">
+            <div class="service-img rounded">
+                <img class="img-fluid" src="../static/img/estimation.png" alt="">
+            </div>
+            <div class="service-text rounded p-5">
+                <div class="btn-square rounded-circle mx-auto mb-3">
+                <img class="img-fluid" src="../static/img/icon/icon-5.png" alt="Icon">
+                </div>
+                <h4 class="mb-3">Yield Estimation</h4>
+                <p class="mb-4">Estimate harvest yield with smart AI-powered prediction tools.</p>
+                <a class="btn btn-sm" href="{% url 'yield_estimate' %}"><i class="fa fa-plus text-primary me-2"></i>Get Estimate</a>
+            </div>
+            </div>
+        </div>
+        {% endif %}
+
+        
+    {% if user.is_authenticated and user.farmerprofile.farmersubscription.plan.tier in "STANDARD PREMIUM" %}
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="service-item rounded d-flex h-100">
+            <div class="service-img rounded">
+                <img class="img-fluid" src="../static/img/evoo-7c819bcdd0c343a7bae114cbc9baea2f.jpg" alt="">
+            </div>
+            <div class="service-text rounded p-5">
+                <div class="btn-square rounded-circle mx-auto mb-3">
+                <img class="img-fluid" src="../static/img/icon/icon-4.png" alt="Icon">
+                </div>
+                <h4 class="mb-3">Olive Quality Analysis</h4>
+                <p class="mb-4">Ensure olive quality through image-based chemical estimation.</p>
+                <a class="btn btn-sm" href="{% url 'analyse_olive_quality' %}"><i class="fa fa-plus text-primary me-2"></i>Analyze Now</a>
+            </div>
+            </div>
+        </div>
+    {% endif %}
+
+        <!-- Rainfall Forecasting (Standard and Premium) -->
+    {% if user.is_authenticated and user.farmerprofile.farmersubscription.plan.tier in "STANDARD PREMIUM" %}
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+            <div class="service-item rounded d-flex h-100">
+            <div class="service-img rounded">
+                <img class="img-fluid" src="../static/img/rain.jpg" alt="">
+            </div>
+            <div class="service-text rounded p-5">
+                <div class="btn-square rounded-circle mx-auto mb-3">
+                <img class="img-fluid" src="../static/img/icon/icon-8.png" alt="Icon">
+                </div>
+                <h4 class="mb-3">Rainfall Forecasting</h4>
+                <p class="mb-4">Get short-term rainfall predictions based on weather models.</p>
+                <a class="btn btn-sm" href="{% url 'rainfall_forecast' %}"><i class="fa fa-plus text-primary me-2"></i>Check Forecast</a>
+            </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Market Price Forecasting (Premium only) -->
+        {% if user.is_authenticated and user.farmerprofile.farmersubscription.plan.tier == "PREMIUM" %}
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+            <div class="service-item rounded d-flex h-100">
+            <div class="service-img rounded">
+                <img class="img-fluid" src="../static/img/forcast.png" alt="">
+            </div>
+            <div class="service-text rounded p-5">
+                <div class="btn-square rounded-circle mx-auto mb-3">
+                <img class="img-fluid" src="../static/img/icon/icon-2.png" alt="Icon">
+                </div>
+                <h4 class="mb-3">Market Price Forecasting</h4>
+                <p class="mb-4">Make informed sales decisions by forecasting crop market trends.</p>
+                <a class="btn btn-sm" href="{% url 'forecast_price' %}"><i class="fa fa-plus text-primary me-2"></i>View Trends</a>
+            </div>
+            </div>
+        </div>
+        {% endif %}
+
+     </div>
+
 </div>
 <!-- Service End -->
 
@@ -387,7 +400,7 @@
                     <div class="portfolio-inner rounded">
                         <img class="img-fluid" src="../static/img/service-1.jpg" alt="">
                         <div class="portfolio-text">
-                            <h4 class="text-white mb-4">Landscaping</h4>
+                            <h4 class="text-white mb-4">Crop Rotation Chatbot</h4>
                             <div class="d-flex">
                                 <a class="btn btn-lg-square rounded-circle mx-2" href="../static/img/service-1.jpg" data-lightbox="portfolio"><i class="fa fa-eye"></i></a>
                                 <a class="btn btn-lg-square rounded-circle mx-2" href=""><i class="fa fa-link"></i></a>
@@ -399,7 +412,7 @@
                     <div class="portfolio-inner rounded">
                         <img class="img-fluid" src="../static/img/service-2.jpg" alt="">
                         <div class="portfolio-text">
-                            <h4 class="text-white mb-4">Pruning plants</h4>
+                            <h4 class="text-white mb-4">Full weather forcasting</h4>
                             <div class="d-flex">
                                 <a class="btn btn-lg-square rounded-circle mx-2" href="../static/img/service-2.jpg" data-lightbox="portfolio"><i class="fa fa-eye"></i></a>
                                 <a class="btn btn-lg-square rounded-circle mx-2" href=""><i class="fa fa-link"></i></a>
@@ -411,7 +424,7 @@
                     <div class="portfolio-inner rounded">
                         <img class="img-fluid" src="../static/img/service-3.jpg" alt="">
                         <div class="portfolio-text">
-                            <h4 class="text-white mb-4">Irrigation & Drainage</h4>
+                            <h4 class="text-white mb-4">Rainfall forcasting</h4>
                             <div class="d-flex">
                                 <a class="btn btn-lg-square rounded-circle mx-2" href="../static/img/service-3.jpg" data-lightbox="portfolio"><i class="fa fa-eye"></i></a>
                                 <a class="btn btn-lg-square rounded-circle mx-2" href=""><i class="fa fa-link"></i></a>
@@ -423,7 +436,7 @@
                     <div class="portfolio-inner rounded">
                         <img class="img-fluid" src="../static/img/service-4.jpg" alt="">
                         <div class="portfolio-text">
-                            <h4 class="text-white mb-4">Farm Maintenance</h4>
+                            <h4 class="text-white mb-4">Farm Maintenance Dashboard</h4>
                             <div class="d-flex">
                                 <a class="btn btn-lg-square rounded-circle mx-2" href="../static/img/service-4.jpg" data-lightbox="portfolio"><i class="fa fa-eye"></i></a>
                                 <a class="btn btn-lg-square rounded-circle mx-2" href=""><i class="fa fa-link"></i></a>
@@ -435,7 +448,7 @@
                     <div class="portfolio-inner rounded">
                         <img class="img-fluid" src="../static/img/service-5.jpg" alt="">
                         <div class="portfolio-text">
-                            <h4 class="text-white mb-4">Green Technology</h4>
+                            <h4 class="text-white mb-4">Plant Scanner</h4>
                             <div class="d-flex">
                                 <a class="btn btn-lg-square rounded-circle mx-2" href="../static/img/service-5.jpg" data-lightbox="portfolio"><i class="fa fa-eye"></i></a>
                                 <a class="btn btn-lg-square rounded-circle mx-2" href=""><i class="fa fa-link"></i></a>
@@ -447,7 +460,7 @@
                     <div class="portfolio-inner rounded">
                         <img class="img-fluid" src="../static/img/service-6.jpg" alt="">
                         <div class="portfolio-text">
-                            <h4 class="text-white mb-4">Urban Gardening</h4>
+                            <h4 class="text-white mb-4">Intercative Farm Map</h4>
                             <div class="d-flex">
                                 <a class="btn btn-lg-square rounded-circle mx-2" href="../static/img/service-6.jpg" data-lightbox="portfolio"><i class="fa fa-eye"></i></a>
                                 <a class="btn btn-lg-square rounded-circle mx-2" href=""><i class="fa fa-link"></i></a>

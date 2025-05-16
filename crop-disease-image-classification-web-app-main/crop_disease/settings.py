@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
 
-    
+    #Models
     'olive_fruit_detection.apps.OliveFruitDetectionConfig',
     'olive_oil_quality.apps.OliveOilQualityConfig',
     'olive_oil_price_forcating.apps.OliveOilPriceForcatingConfig',
@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     'farm_yield_estimator.apps.FarmYieldEstimatorConfig',
     'soil_composition.apps.SoilCompositionConfig',
 
-     #Payment
+    #Payment
     'payments',
 ]
 
@@ -171,9 +171,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
-
-
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
@@ -184,3 +181,4 @@ ALLOWED_HOSTS = ['*']
 TEMPLATES[0]['OPTIONS']['context_processors'] += [
     'users.context_processors.subscription_tier',
 ]
+

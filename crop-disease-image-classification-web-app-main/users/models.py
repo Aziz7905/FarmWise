@@ -11,6 +11,8 @@ class FarmerProfile(models.Model):
     about = models.TextField(blank=True)
     profile_image = models.ImageField(upload_to='profile_pics', default='default.jpg')
 
+    
+
     def __str__(self):
         return f'{self.user.username} (Farmer)'
 
