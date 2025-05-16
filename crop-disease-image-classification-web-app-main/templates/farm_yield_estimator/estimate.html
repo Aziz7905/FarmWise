@@ -50,9 +50,9 @@
             <p><strong>Average yield per tree:</strong> {{ sample_mean|floatformat:2 }} kg</p>
             <p><strong>Typical variation:</strong> {{ sample_std|floatformat:2 }} kg</p>
             <p><strong>Possible error range:</strong> ±{{ moe|floatformat:2 }} kg</p>
-            <p><strong>Each tree is likely between:</strong> {{ ci_low|floatformat:2 }} – {{ ci_high|floatformat:2 }} kg</p>
+          <!-----  <p><strong>Each tree is likely between:</strong> {{ ci_low|floatformat:2 }} – {{ ci_high|floatformat:2 }} kg</p> --->
             <p><strong>Total estimated production:</strong> {{ total_estimate|floatformat:2 }} kg</p>
-            <p><strong>Likely total range:</strong> {{ total_ci_low|floatformat:2 }} – {{ total_ci_high|floatformat:2 }} kg</p>
+          <!----  <p><strong>Likely total range:</strong> {{ total_ci_low|floatformat:2 }} – {{ total_ci_high|floatformat:2 }} kg</p> --->
         </div>
     {% elif single_tree_result %}
         <div class="mt-4 alert alert-info">

@@ -22,9 +22,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-   
-    path('', include('prediction.urls')),
     path('', include('users.urls')), 
+    path('', include('prediction.urls')),
+    
 
      # AI Model Apps
     path('', include('olive_fruit_detection.urls')),
