@@ -14,6 +14,7 @@ from .models import FarmerPost
 
 from payments.models import SubscriptionPlan, FarmerSubscription
 from payments.enum import SubscriptionTier
+from django.shortcuts import render
 
 
 def homepage(request):
@@ -230,6 +231,7 @@ def dashboard(request):
     profile = request.user.farmerprofile
     subscription = getattr(profile, 'farmersubscription', None)
     current_plan = subscription.plan.tier if subscription and subscription.active else "FREE"
+    user_location = getattr(request.user.farmerprofile, 'location', 'Tunis') # Default to 'Tunis' if location is not set
     context = {
         'profile': profile,
         'fertilizers': profile.fertilizers.all(),
@@ -240,8 +242,12 @@ def dashboard(request):
         'tasks': profile.croptask_set.all().order_by('date')[:5],
         'notes': profile.note_set.all(),
         'current_plan': current_plan,
+        'user_location': user_location,
     }
+
+    
     return render(request, 'users/dashboard.html', context)
+
 
 
 
