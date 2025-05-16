@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,8 +22,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-import os
-os.environ['GDAL_LIBRARY_PATH'] = r'C:\Users\ounin\AppData\Local\Programs\Python\Python311\Lib\site-packages\osgeo\gdal.dll'
+
+
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -60,6 +62,9 @@ INSTALLED_APPS = [
     'crop_soil_suitability.apps.CropSoilSuitabilityConfig',
     'farm_yield_estimator.apps.FarmYieldEstimatorConfig',
     'soil_composition.apps.SoilCompositionConfig',
+
+     #Payment
+    'payments',
 ]
 
 
@@ -86,6 +91,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'users.context_processors.subscription_tier',
             ],
         },
     },
@@ -166,6 +172,15 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-load_dotenv()
 
 
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
+
+
+ALLOWED_HOSTS = ['*']
+
+TEMPLATES[0]['OPTIONS']['context_processors'] += [
+    'users.context_processors.subscription_tier',
+]

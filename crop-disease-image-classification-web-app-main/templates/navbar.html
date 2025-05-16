@@ -76,29 +76,36 @@
 
       <div class="collapse navbar-collapse" id="navbarToggle">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="{% url 'defaulthomepage' %}">Home</a></li>
-          {% if user.is_authenticated %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'post-list' %}">Posts</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'create-post' %}">Create Post</a></li>
-
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown">
-                Services
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'home' %}">Plant Scanner</a></li>
-                <li><a class="dropdown-item" href="{% url 'analyse_olive_quality' %}">Quality Analysis</a></li>
-                <li><a class="dropdown-item" href="{% url 'forecast_price' %}">Price Forecasting</a></li>
-                <li><a class="dropdown-item" href="{% url 'rainfall_forecast' %}">Rainfall Forecasting</a></li>
-                <li><a class="dropdown-item" href="{% url 'detect_olive' %}">Olive Detection</a></li>
-                <li><a class="dropdown-item" href="{% url 'yield_estimate' %}">Yield Estimator</a></li>
-                <li><a class="dropdown-item" href="{% url 'soil-map' %}">Soil Composition Detailed</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'defaulthomepage' %}">Home</a></li>  
+           {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'post-list' %}">Posts</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'create-post' %}">Create Post</a></li>
+     {% endif %}
 
 
-              </ul>
-            </li>
-          {% endif %}
+{% if subscription_tier == 'PREMIUM' or subscription_tier == 'STANDARD' %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown">
+            Services
+        </a>
+        <ul class="dropdown-menu">
+          
+            <li><a class="dropdown-item" href="{% url 'analyse_olive_quality' %}">Quality Analysis</a></li>
+            <li><a class="dropdown-item" href="{% url 'rainfall_forecast' %}">Rainfall Forecasting</a></li>
+            <li><a class="dropdown-item" href="{% url 'soil-map' %}">Soil Composition Detailed</a></li>
+            <li><a class="dropdown-item" href="{% url 'detect_olive' %}">Olive Detection</a></li>
+            <li><a class="dropdown-item" href="{% url 'crop_soil_suitability' %}">Crop & Soil Suitability</a></li>
+            {% if subscription_tier == 'PREMIUM' %}
+            <li><a class="dropdown-item" href="{% url 'forecast_price' %}">Price Forecasting</a></li>
+            <li><a class="dropdown-item" href="{% url 'home' %}">Plant Scanner</a></li>
+            <li><a class="dropdown-item" href="{% url 'yield_estimate' %}">Yield Estimator</a></li>
+            {% endif %}
+        </ul>
+    </li>
+{% endif %}
+
+        
         </ul>
 
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
