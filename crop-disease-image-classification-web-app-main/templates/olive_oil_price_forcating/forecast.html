@@ -12,59 +12,37 @@
                 <input type="date" name="ds" class="form-control" required>
             </div>
             <div class="col-md-6 mb-3">
-                <label>Year:</label>
-                <input type="number" name="year" class="form-control" required>
+                <label>Harvest Season:</label>
+                <select name="is_harvest_season" class="form-select" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
             </div>
+
+            {% for field, label in field_labels %}
             <div class="col-md-6 mb-3">
-                <label>Month:</label>
-                <input type="number" name="month" class="form-control" required>
+                <label>{{ label }}:</label>
+                <input type="number" step="0.01" name="{{ field }}" class="form-control" required>
             </div>
-            <div class="col-md-6 mb-3">
-                <label>Harvest Season (0 or 1):</label>
-                <input type="number" name="is_harvest_season" class="form-control" required>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label>Production:</label>
-                <input type="number" step="0.01" name="production" class="form-control" required>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label>Surplus:</label>
-                <input type="number" step="0.01" name="surplus" class="form-control" required>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label>Import Demand:</label>
-                <input type="number" step="0.01" name="import_demand" class="form-control" required>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label>Market Tension:</label>
-                <input type="number" step="0.01" name="market_tension" class="form-control" required>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label>Price Premium:</label>
-                <input type="number" step="0.01" name="price_premium" class="form-control" required>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label>Global Price:</label>
-                <input type="number" step="0.01" name="global_price" class="form-control" required>
-            </div>
+            {% endfor %}
         </div>
 
-        <button type="submit" class="btn btn-primary mt-3">Forecast</button>
+        <button type="submit" class="btn btn-success mt-3 w-100">Forecast</button>
     </form>
 
     {% if result %}
-        <div class="alert alert-info mt-4">
-            <h5>📊 Forecast Result for {{ result.ds }}</h5>
-            <ul>
-                <li><strong>Predicted Price:</strong> {{ result.yhat }}</li>
-                <li><strong>Lower Bound:</strong> {{ result.yhat_lower }}</li>
-                <li><strong>Upper Bound:</strong> {{ result.yhat_upper }}</li>
-            </ul>
-        </div>
+    <!-- Forecast Summary -->
+    <div class="alert alert-info alert-dismissible fade show mt-4" role="alert">
+        <h5 class="alert-heading">📊 Forecast for {{ result.ds }}</h5>
+        <ul class="mb-0">
+            <li><strong>Harvest Season:</strong> {{ result.is_harvest_season_display }}</li>
+            <li><strong>Predicted Price:</strong> {{ result.yhat|floatformat:2 }} TND</li>
+            <li><strong>Lower Bound:</strong> {{ result.yhat_lower|floatformat:2 }} TND</li>
+            <li><strong>Upper Bound:</strong> {{ result.yhat_upper|floatformat:2 }} TND</li>
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     {% endif %}
-
-    {% if error %}
-        <div class="alert alert-danger mt-4"><strong>Error:</strong> {{ error }}</div>
-    {% endif %}
+  
 </div>
 {% endblock %}
