@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>🫒 Olive Fruit Detection</h2>
+    <form method="post" enctype="multipart/form-data" class="mb-4">
+        {% csrf_token %}
+        <input type="file" name="image" class="form-control my-2" required>
+        <button type="submit" class="btn btn-success">Detect</button>
+    </form>
+
+    {% if result_image %}
+        <div>
+            <h4>🖼️ Detection Result</h4>
+            <img src="{{ result_image }}" class="img-fluid mb-3" />
+            <p><strong>🧮 Total Detections:</strong> {{ box_count }}</p>
+            <p><strong>🧪 Estimated Total Weight:</strong> {{ estimated_weight }} grams</p>
+
+            <ul>
+                {% for label, conf in labels %}
+                    <li><strong>{{ label }}</strong>: {{ conf|floatformat:2 }}% confidence</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+</div>
+{% endblock %}

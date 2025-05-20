@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+
+    .profile-wrapper {
+        max-width: 950px;
+        margin: 3rem auto;
+        padding: 3rem;
+        background-color: #fff;
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+    }
+
+    .profile-wrapper:hover {
+        transform: translateY(-3px);
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .profile-header h2 {
+        font-weight: 700;
+        color: #2f6d3c;
+        letter-spacing: -0.5px;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-header p {
+        color: #6c757d;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .profile-image-preview {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        position: relative;
+    }
+
+    .profile-image-preview img {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid #2f6d3c;
+        box-shadow: 0 8px 20px rgba(47, 109, 60, 0.15);
+        transition: all 0.3s ease;
+    }
+
+    .profile-image-preview:hover img {
+        transform: scale(1.03);
+        box-shadow: 0 10px 25px rgba(47, 109, 60, 0.2);
+    }
+
+    legend {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2f6d3c;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #e9ecef;
+        margin-bottom: 1.5rem;
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    legend::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 50px;
+        height: 2px;
+        background: #2f6d3c;
+    }
+
+    .btn-success {
+        background-color: #2f6d3c;
+        border: none;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+        letter-spacing: 0.5px;
+        background-image: linear-gradient(to right, #2f6d3c, #3a7d48);
+    }
+
+    .btn-success:hover {
+        background-color: #245530;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(47, 109, 60, 0.3);
+    }
+
+    .form-control:focus {
+        border-color: #8db596;
+        box-shadow: 0 0 0 0.2rem rgba(143, 181, 150, 0.25);
+    }
+
+    @media (max-width: 768px) {
+        .profile-wrapper {
+            padding: 2rem;
+            margin: 1.5rem;
+        }
+        
+        .profile-header h2 {
+            font-size: 1.75rem;
+        }
+    }
+</style>
+
+<div class="profile-wrapper">
+    <div class="profile-header">
+        <h2>{{ user.username }}</h2>
+        <p>{{ user.email }}</p>
+    </div>
+
+    <div class="profile-image-preview">
+        <img src="{{ user.farmerprofile.profile_image.url }}" alt="Profile Image">
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <fieldset class="form-group">
+            <legend>Account Info</legend>
+            {{ u_form|crispy }}
+        </fieldset>
+
+        <fieldset class="form-group mt-4">
+            <legend>Farmer Profile</legend>
+            {{ p_form|crispy }}
+        </fieldset>
+
+        <div class="form-group text-center mt-4">
+            <button class="btn btn-success" type="submit">Update Profile</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

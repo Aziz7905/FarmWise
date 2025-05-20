@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="register-container" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); min-height: 100vh;">
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh;">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <!-- Registration Card -->
+                <div class="card border-0 shadow-lg overflow-hidden" style="border-radius: 1.5rem;">
+                    <!-- Animated Background -->
+                    <div class="position-absolute w-100 h-100" style="z-index: 0;">
+                        <div class="position-absolute bg-success opacity-10" style="width: 200px; height: 200px; border-radius: 50%; top: -50px; left: -50px;"></div>
+                        <div class="position-absolute bg-primary opacity-10" style="width: 150px; height: 150px; border-radius: 50%; bottom: -30px; right: -30px;"></div>
+                    </div>
+                    
+                    <div class="card-body position-relative" style="z-index: 1; padding: 2.5rem;">
+                        <!-- Logo -->
+                        <div class="text-center mb-4">
+                            <img src="{% static 'images/logoFW.png' %}" alt="FarmWise Logo" 
+                                 class="animate__animated animate__fadeInDown"
+                                 style="height: 100px; transition: transform 0.3s ease;">
+                        </div>
+
+                        <!-- Header Text -->
+                        <div class="text-center mb-5">
+                            <h3 class="text-dark mb-2 fw-bold">Join Our Farming Community </h3>
+                            <p class="text-muted">Start your agricultural journey with us</p>
+                        </div>
+
+                        <!-- Registration Form -->
+                        <form method="POST" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            
+                            <!-- Username Input -->
+                            <div class="form-group mb-4">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-user text-success"></i>
+                                    </span>
+                                    <input type="text" name="username" class="form-control form-control-lg" 
+                                           placeholder="Username" required
+                                           style="border-left: 0; transition: all 0.3s ease;">
+                                </div>
+                            </div>
+
+                            <!-- Email Input -->
+                            <div class="form-group mb-4">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-envelope text-success"></i>
+                                    </span>
+                                    <input type="email" name="email" class="form-control form-control-lg" 
+                                           placeholder="Email Address" required
+                                           style="border-left: 0; transition: all 0.3s ease;">
+                                </div>
+                            </div>
+
+                            <!-- Password Input -->
+                            <div class="form-group mb-4">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-lock text-success"></i>
+                                    </span>
+                                    <input type="password" name="password1" class="form-control form-control-lg" 
+                                           placeholder="Password" required
+                                           style="border-left: 0; transition: all 0.3s ease;">
+                                </div>
+                            </div>
+
+                            <!-- Confirm Password Input -->
+                            <div class="form-group mb-4">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-lock text-success"></i>
+                                    </span>
+                                    <input type="password" name="password2" class="form-control form-control-lg" 
+                                           placeholder="Confirm Password" required
+                                           style="border-left: 0; transition: all 0.3s ease;">
+                                </div>
+                            </div>
+
+                            <!-- Terms Checkbox -->
+                            <div class="form-check mb-4">
+                                <input class="form-check-input" type="checkbox" id="terms" required>
+                                <label class="form-check-label text-muted small" for="terms">
+                                    I agree to the <a href="#" class="text-success text-decoration-none">Terms & Conditions</a>
+                                </label>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-success btn-lg w-100 mb-3" 
+                                    style="transition: all 0.3s ease;">
+                                Create Account
+                                <i class="fas fa-seedling ms-2"></i>
+                            </button>
+
+                            <!-- Social Register (Optional) -->
+                            <div class="text-center mb-4">
+                                <p class="text-muted small mb-2">Or sign up with</p>
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle">
+                                        <i class="fab fa-google"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle">
+                                        <i class="fab fa-apple"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Login Link -->
+                            <div class="text-center">
+                                <p class="text-muted small mb-0">Already have an account?
+                                    <a href="{% url 'login' %}" class="text-success text-decoration-none fw-bold">
+                                        Sign In
+                                    </a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .input-group-text { transition: all 0.3s ease; }
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #198754;
+    }
+    .form-control:focus + .input-group-text {
+        border-color: #198754;
+        background-color: rgba(25, 135, 84, 0.05);
+    }
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(25, 135, 84, 0.3);
+    }
+    .form-check-input:checked {
+        background-color: #198754;
+        border-color: #198754;
+    }
+</style>
+
+<!-- Animate.css for logo animation -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.content }}</p>
+            {% if post.image %}
+                <img src="{{ post.image.url }}" class="img-fluid mt-3 rounded" style="max-height: 300px;">
+            {% endif %}
+            <p class="text-muted mt-2">By {{ post.author.user.username }} on {{ post.date_posted|date:"M j, Y" }}</p>
+        </div>
+    </div>
+
+    <h5>Comments</h5>
+    {% for comment in comments %}
+        <div class="border p-3 mb-2 bg-light rounded">
+            <strong>{{ comment.author.username }}</strong> — {{ comment.date_posted|date:"M j, Y H:i" }}<br>
+            {{ comment.content }}
+        </div>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <form method="POST" class="mt-4">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-success">Post Comment</button>
+        </form>
+    {% else %}
+        <p class="mt-3">You must be <a href="{% url 'login' %}">logged in</a> to comment.</p>
+    {% endif %}
+</div>
+<!-- Like + Edit/Delete Buttons -->
+<div class="d-flex gap-3 mt-3">
+    <form method="POST" action="{% url 'like-post' post.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-success btn-sm">
+            👍 Like ({{ post.total_likes }})
+        </button>
+    </form>
+
+    {% if user == post.author.user %}
+        <a href="{% url 'edit-post' post.pk %}" class="btn btn-outline-primary btn-sm">✏️ Edit</a>
+        <a href="{% url 'delete-post' post.pk %}" class="btn btn-outline-danger btn-sm">🗑️ Delete</a>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">📈 Olive Oil Price Forecast</h2>
+
+    <form method="post" class="card p-4 shadow">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Date (ds):</label>
+                <input type="date" name="ds" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Harvest Season:</label>
+                <select name="is_harvest_season" class="form-select" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+
+            {% for field, label in field_labels %}
+            <div class="col-md-6 mb-3">
+                <label>{{ label }}:</label>
+                <input type="number" step="0.01" name="{{ field }}" class="form-control" required>
+            </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3 w-100">Forecast</button>
+    </form>
+
+    {% if result %}
+    <!-- Forecast Summary -->
+    <div class="alert alert-info alert-dismissible fade show mt-4" role="alert">
+        <h5 class="alert-heading">📊 Forecast for {{ result.ds }}</h5>
+        <ul class="mb-0">
+            <li><strong>Harvest Season:</strong> {{ result.is_harvest_season_display }}</li>
+            <li><strong>Predicted Price:</strong> {{ result.yhat|floatformat:2 }} TND</li>
+            <li><strong>Lower Bound:</strong> {{ result.yhat_lower|floatformat:2 }} TND</li>
+            <li><strong>Upper Bound:</strong> {{ result.yhat_upper|floatformat:2 }} TND</li>
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+  
+</div>
+{% endblock %}
