@@ -1,5 +1,3 @@
-<<<<<<< Deployment-Web-App
-=======
 # FarmWise
 
 **FarmWise** is a collaborative data science project designed to optimize farm management using advanced machine learning techniques. Developed as part of the **"Data Science and Machine Learning" program at ESPRIT University**, this project aims to address the challenges faced in agriculture through data-driven solutions.
@@ -37,5 +35,5 @@ This project was developed collaboratively by a team of seven students as part o
 - [Allaya Med Aziz](https://github.com/aziz877)  
 - [Latrach Nada](https://github.com/nadapianist)
 - [Bahri Yasmine](https://github.com/Bahriyasmine) 
->>>>>>> main
+
 
